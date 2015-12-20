@@ -1,6 +1,6 @@
 # Crayon
 
-Crayon is a stack-based programming language based on a 2-dimensional output canvas. More spec will come soon, then code sometime later.
+Crayon is a stack-based programming language based on a 2-dimensional output canvas. More spec will come soon, then an interpreter sometime later.
 
 ## Spec
 
@@ -13,10 +13,10 @@ Crayon is a stack-based programming language based on a 2-dimensional output can
 - `e` - move cursor E by 1
 - `w` - move cursor W by 1
 - `L` - turn cursor 90° counter-clockwise
-- `R` - turn cursor 90° clockwise
-- `U` - turn cursor 180°
 - `l` - turn cursor 45° counter-clockwise
-- `r` - turn cursor 45° counter-clockwise
+- `R` - turn cursor 90° clockwise
+- `r` - turn cursor 45° clockwise
+- `U` - turn cursor 180°
 - `u` - start next line
 - `f` - move cursor forward by 1
 - `F` - pop `X`, move cursor forward by `X`
