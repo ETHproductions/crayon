@@ -28,11 +28,11 @@ Crayon uses a custom encoding which is currently unfinished. Here is the table s
 
 Characters currently not assigned to a task:
 
-    $`
+    $` (plus many letters)
 
 Characters currently not assigned to a code point:
 
-    ≤≥¡≠
+    ≤≥¡≠±
 
 #### Data types
 
@@ -242,6 +242,9 @@ Of course, sometimes this can be cumbersome, as the action must be repeated in b
 | `_` | `N` | negate
 | `_` | `S` | split string into chars
 | `_` | `A` | join array with empty strings
+| `±` | `N` | no-op
+| `±` | `S` | parse string as number
+| `±` | `A` | sum
 
 #### Binary operators
 
