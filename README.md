@@ -9,8 +9,8 @@ Crayon is a stack-based programming language based on a 2-dimensional output can
 Crayon uses a custom encoding which is currently unfinished. Here is the table so far: (`?` denotes unassigned code point)
 
         x0  x1  x2  x3  x4  x5  x6  x7  x8  x9  xA  xB  xC  xD  xE  xF
-    0x  ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   nl  ?   ?   ?   ?   ?
-    1x  ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?
+    0x  ⓪   ①   ②   ③   ④   ⑤   ⑥   ⑦   ⑧   ⑨   nl  ⑪   ⑫   ⑬   ⑭   ⑮
+    1x  ⑯   ⑰   ⑱   ⑲   ⑳   ⑩   ₀   ₁   ₂   ₃   ₄   ₅   ₆   ₇   ₈   ₉
     2x  sp  !   "   #   $   %   &   '   (   )   *   +   ,   -   .   /
     3x  0   1   2   3   4   5   6   7   8   9   :   ;   <   =   >   question mark
     4x  @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
@@ -237,7 +237,6 @@ Of course, sometimes this can be cumbersome, as the action must be repeated in b
 | `)` | `S` | split off last char
 | `)` | `A` | split off last item
 | `~` | `N` | binary NOT
-| `~` | `S` | TBA
 | `~` | `A` | keep one of each item
 | `_` | `N` | negate
 | `_` | `S` | split string into chars
@@ -264,39 +263,20 @@ Of course, sometimes this can be cumbersome, as the action must be repeated in b
 | `-` | `AA` | setwise subtraction; remove items in `B` from `A`
 | `*` | `NN` | multiply numbers
 | `*` | `NS` | repeat `S` `N` times
-| `*` | `NA` | TBA
-| `*` | `SS` | TBA
-| `*` | `SA` | TBA
 | `*` | `AA` | setwise addition; concat arrays, sort, remove duplicates
 | `/` | `NN` | divide numbers
 | `/` | `NS` | split `S` into groups of `N` chars
 | `/` | `NA` | split `A` into groups of `N` items
 | `/` | `SS` | split `X` at occurances of `Y`
-| `/` | `SA` | TBA
-| `/` | `AA` | TBA
 | `%` | `NN` | take modulo of numbers
 | `%` | `NS` | unriffle `S` into `N` groups (`"hweolrllod"2% => ["hello","world"]`)
 | `%` | `NA` | unriffle `A` into `N` groups
 | `%` | `SS` | index of `Y` in `X`
-| `%` | `SA` | TBA
-| `%` | `AA` | TBA
 | `^` | `NN` | binary XOR
-| `^` | `NS` | TBA
-| `^` | `NA` | TBA
-| `^` | `SS` | TBA
-| `^` | `SA` | TBA
 | `^` | `AA` | setwise XOR; keep one of each item that exists in one array but not the other
 | `&` | `NN` | binary AND
-| `&` | `NS` | TBA
-| `&` | `NA` | TBA
-| `&` | `SS` | TBA
-| `&` | `SA` | TBA
 | `&` | `AA` | setwise AND; keep one of each item that exists in both arrays
 | `|` | `NN` | binary OR
-| `|` | `NS` | TBA
-| `|` | `NA` | TBA
-| `|` | `SS` | TBA
-| `|` | `SA` | TBA
 | `|` | `AA` | setwise OR; keep one of each item that exists in either array
 
 More spec to come.... Suggestions are welcome for operator tasks (or anything else)!
