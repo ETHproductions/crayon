@@ -26,6 +26,14 @@ Crayon uses a custom encoding which is currently unfinished. Here is the table s
     Ex  ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?
     Fx  ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?
 
+Characters currently not assigned to a task:
+
+    $`
+
+Characters currently not assigned to a code point:
+
+    ≤≥¡≠
+
 #### Data types
 
 There are three main data types in Crayon:
@@ -182,22 +190,29 @@ Of course, sometimes this can be cumbersome, as the action must be repeated in b
 | Char | Action
 | --- | ---
 | `=` | equal
+| `≠` | not equal
 | `<` | lesser
 | `>` | greater
+| `≤` | lesser-equal
+| `≥` | greater-equal
 | `!` | top item is truthy
+| `¡` | top item is falsy
 | `?` | delayed conditional
 | `{` | else
-| `}` | end-if
-| `h` | pop `X`, loop through each item `I` and index `i` in `X`
+| `}` | end-if, end-loop
+| `h` | pop `X`, loop through each item `I` and index `i` in `X`*
+
+*If a loop is entered inside another loop, `J` and `j` are used instead.
 
 #### Stack manipulation
 
 | Char | Action
 | --- | ---
 | `[` | push empty array, stack operations enter this array
+| `@` | stack operations enter top array
 | `]` | wrap the current stack in an array and push it back onto the main stack
 | `\` | swap top two items
-| TBA | pop `X`, bring `X`th item to top
+| `,` | pop `X`, bring `X`th item to top
 | `:` | duplicate top item
 | `;` | pop top item
 
@@ -221,7 +236,12 @@ Of course, sometimes this can be cumbersome, as the action must be repeated in b
 | `)` | `N` | increment
 | `)` | `S` | split off last char
 | `)` | `A` | split off last item
-| `~` | | TBA
+| `~` | `N` | binary NOT
+| `~` | `S` | TBA
+| `~` | `A` | keep one of each item
+| `_` | `N` | negate
+| `_` | `S` | split string into chars
+| `_` | `A` | join array with empty strings
 
 #### Binary operators
 
@@ -257,8 +277,23 @@ Of course, sometimes this can be cumbersome, as the action must be repeated in b
 | `%` | `SS` | index of `Y` in `X`
 | `%` | `SA` | TBA
 | `%` | `AA` | TBA
-| `^` | | TBA
-| `&` | | TBA
-| `|` | | TBA
+| `^` | `NN` | binary XOR
+| `^` | `NS` | TBA
+| `^` | `NA` | TBA
+| `^` | `SS` | TBA
+| `^` | `SA` | TBA
+| `^` | `AA` | setwise XOR; keep one of each item that exists in one array but not the other
+| `&` | `NN` | binary AND
+| `&` | `NS` | TBA
+| `&` | `NA` | TBA
+| `&` | `SS` | TBA
+| `&` | `SA` | TBA
+| `&` | `AA` | setwise AND; keep one of each item that exists in both arrays
+| `|` | `NN` | binary OR
+| `|` | `NS` | TBA
+| `|` | `NA` | TBA
+| `|` | `SS` | TBA
+| `|` | `SA` | TBA
+| `|` | `AA` | setwise OR; keep one of each item that exists in either array
 
-More spec to come...
+More spec to come.... Suggestions are welcome for operator tasks (or anything else)!
