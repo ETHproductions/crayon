@@ -114,11 +114,11 @@ The crayon is then moved one space past the end of the pattern, to (x:4, y:-1).
 | `s` | move crayon S by 1
 | `e` | move crayon E by 1
 | `w` | move crayon W by 1
-| `L` | turn crayon 90° counter|clockwise
+| `L` | turn crayon 90° counter-clockwise
 | `R` | turn crayon 90° clockwise
 | `U` | turn crayon 180°
-| `l` | turn crayon 45° counter|clockwise
-| `r` | turn crayon 45° counter|clockwise
+| `l` | turn crayon 45° counter-clockwise
+| `r` | turn crayon 45° clockwise
 | `u` | start next line
 | `f` | move crayon forward by 1
 | `F` | pop `X`, move crayon forward by `X`
