@@ -3,9 +3,9 @@
 Crayon is a stack-based programming language based on a 2-dimensional output canvas. More spec will come soon, then an interpreter sometime later.
 
 ## Spec
-#### Main page
-#### [Operators](https://github.com/ETHproductions/Crayon/blob/master/docs/Operators.md)
-#### [Encoding](https://github.com/ETHproductions/Crayon/blob/master/docs/Encoding.md)
+- Main page
+- [Operators](https://github.com/ETHproductions/Crayon/blob/master/docs/Operators.md)
+- [Encoding](https://github.com/ETHproductions/Crayon/blob/master/docs/Encoding.md)
 
 #### Data types
 

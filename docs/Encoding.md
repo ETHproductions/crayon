@@ -1,7 +1,7 @@
-## Spec
-#### [Main page](https://github.com/ETHproductions/Crayon/blob/master/README.md)
-#### [Operators](https://github.com/ETHproductions/Crayon/blob/master/docs/Operators.md)
-#### Encoding
+#### Spec
+- [Main page](https://github.com/ETHproductions/Crayon/blob/master/README.md)
+- [Operators](https://github.com/ETHproductions/Crayon/blob/master/docs/Operators.md)
+- Encoding
 
 ### Encoding
 
