@@ -1,3 +1,8 @@
+## Spec
+#### [Main page](https://github.com/ETHproductions/Crayon/blob/master/README.md)
+#### [Operators](https://github.com/ETHproductions/Crayon/blob/master/docs/Operators.md)
+#### Encoding
+
 ### Encoding
 
 Crayon uses a custom encoding which is currently unfinished. Here is the table so far:
@@ -22,7 +27,7 @@ Crayon uses a custom encoding which is currently unfinished. Here is the table s
 
 Characters currently not assigned to a task:
 
-    $` (plus many letters)
+    ` (plus many letters)
 
 Characters currently not assigned to a code point:
 

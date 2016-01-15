@@ -1,3 +1,8 @@
+## Spec
+#### [Main page](https://github.com/ETHproductions/Crayon/blob/master/README.md)
+#### Operators
+#### [Encoding](https://github.com/ETHproductions/Crayon/blob/master/docs/Encoding.md)
+
 ### Output manipulation
 
 | Char | Action
