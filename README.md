@@ -75,7 +75,4 @@ while the crayon is at (x:0, y:3) and pointing NE, the result will be:
     
 The crayon is then moved one space past the end of the pattern, to (x:4, y:-1).
 
-### [Operators](https://github.com/ETHproductions/Crayon/blob/master/docs/Operators.md)
-### [Encoding](https://github.com/ETHproductions/Crayon/blob/master/docs/Encoding.md)
-
 More spec to come.... Suggestions are welcome for anything!
