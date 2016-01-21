@@ -5,22 +5,24 @@
 
 ### Output manipulation
 
-| Char | Action
+| Char* | Action
 | --- | ---
-| `N` | point crayon N
-| `S` | point crayon S
-| `E` | point crayon E
-| `W` | point crayon W
+| dn  | point crayon N
+| ds  | point crayon S
+| de  | point crayon E
+| dw  | point crayon W
 | `n` | move crayon N by 1
 | `s` | move crayon S by 1
 | `e` | move crayon E by 1
 | `w` | move crayon W by 1
-| `L` | turn crayon 90° counter-clockwise
-| `R` | turn crayon 90° clockwise
-| `U` | turn crayon 180°
-| `l` | turn crayon 45° counter-clockwise
-| `r` | turn crayon 45° clockwise
-| `u` | start next line
+| tl1 | turn crayon 45° counter-clockwise
+| tl2 | turn crayon 90° counter-clockwise
+| tl3 | turn crayon 135° counter-clockwise
+| tu4 | turn crayon 180°
+| tr3 | turn crayon 135° clockwise
+| tr2 | turn crayon 90° clockwise
+| tr1 | turn crayon 45° clockwise
+| xnl | start next line
 | `f` | move crayon forward by 1
 | `F` | pop `X`, move crayon forward by `X`
 | `m` | pop `X`, pop `Y`, move crayon by (x: `X`, y: `Y`)
@@ -35,6 +37,8 @@
 | `K` | pop `X`, set canvas to pattern `X`
 | `P` | pretend the top item is the canvas
 | `p` | quit pretending
+
+*For more information on positional and directional control chars, see [Encoding](https://github.com/ETHproductions/Crayon/blob/master/docs/Encoding)
 
 #### Control flow
 
@@ -79,6 +83,7 @@ You can chain conditionals to create AND and OR gates:
          nq    do the same thing.
            }  End if. Note that a { followed by a conditional is parsed
                as "}else if(){" instead of "}else{if(){".
+			  The latter can be forced by adding a space between the items.
 
 Of course, sometimes this can be cumbersome, as the action must be repeated in both truthy cases of the OR. To get around this, just use an empty conditional:
 
@@ -91,19 +96,28 @@ Of course, sometimes this can be cumbersome, as the action must be repeated in b
 | Char | Action
 | --- | ---
 | `=` | equal
-| `≠` | not equal
+| `$=` | not equal
 | `<` | lesser
 | `>` | greater
-| `≤` | lesser-equal
-| `≥` | greater-equal
+| `$<` | lesser-equal
+| `$>` | greater-equal
 | `!` | top item is truthy
-| `¡` | top item is falsy
+| `$!` | top item is falsy
 | `?` | delayed conditional
 | `{` | else
 | `}` | end-if, end-loop
-| `h` | pop `X`, loop through each item `I` and index `i` in `X`*
+| `o` | pop `X`, loop through each item `I` and index `i` in `X`*
+| `O` | perform `o`, but push `I` onto the stack before each iteration*
 
 *If a loop is entered inside another loop, `J` and `j` are used instead.
+
+#### Meta-operators
+
+| Char | Types | Action
+| --- | --- | ---
+| TBA | `N` | map next char over `0..N`
+| TBA | `S` | map next char over each char in `S`
+| TBA | `A` | map next char over all items in `A`
 
 #### Stack manipulation
 
@@ -125,31 +139,30 @@ Of course, sometimes this can be cumbersome, as the action must be repeated in b
 | `.` | decimal literal, extra functions
 | `"` | begin/end string literal
 | `'` | char literal
-| `#` | byte literal
+| `#` | byte literal?
+| `$p` | pi (3.141592...)
+| `$q` | golden ratio (1.618034...)
 
 #### Unary operators
 
 | Char | Type | Action
 | --- | --- | ---
 | `(` | `N` | decrement
-| `(` | `S` | decrement each char code
-| `(` | `A` | decrement each item
+| `(` | `S` | split off first char
+| `(` | `A` | split off first item
 | `)` | `N` | increment
-| `)` | `S` | increment each char code
-| `)` | `A` | increment each item
+| `)` | `S` | split off last char
+| `)` | `A` | split off last item
 | `~` | `N` | binary NOT
 | `~` | `S` | TBA
 | `~` | `A` | uniquify; keep one of each item
 | `_` | `N` | negate
 | `_` | `S` | split string into chars
 | `_` | `A` | join array with empty strings
-| `±` | `N` | no-op
-| `±` | `S` | parse string as number
-| `±` | `A` | sum
-| TBA | `S` | split off first char
-| TBA | `A` | split off first item
-| TBA | `S` | split off last char
-| TBA | `A` | split off last item
+| `$+` | `N` | no-op
+| `$+` | `S` | parse string as number
+| `$+` | `A` | sum
+| `$d` | `N` | convert from degrees to radians (`π*180/`)
 
 #### Binary operators
 
@@ -169,11 +182,13 @@ Of course, sometimes this can be cumbersome, as the action must be repeated in b
 | `-` | `AA` | setwise subtraction; remove items in `B` from `A`
 | `*` | `NN` | multiply numbers
 | `*` | `NS` | repeat `S` `N` times
+| `*` | `NA` | repeat `A` `N` times
 | `*` | `AA` | setwise addition; concat arrays, sort, remove duplicates
 | `/` | `NN` | divide numbers
 | `/` | `NS` | split `S` into groups of `N` chars
 | `/` | `NA` | split `A` into groups of `N` items
 | `/` | `SS` | split `X` at occurances of `Y`
+| `/` | `SA` | join `A` with `S`?
 | `%` | `NN` | take modulo of numbers
 | `%` | `NS` | unriffle `S` into `N` groups (`"hweolrllod"2% => ["hello","world"]`)
 | `%` | `NA` | unriffle `A` into `N` groups
@@ -184,8 +199,10 @@ Of course, sometimes this can be cumbersome, as the action must be repeated in b
 | `&` | `AA` | setwise AND; keep one of each item that exists in both arrays
 | `|` | `NN` | binary OR
 | `|` | `AA` | setwise OR; keep one of each item that exists in either array
-| TBA | `NA` | push number to array
-| TBA | `SA` | push string to array
+| TBA | `NN` | bit-shift `A` left by `B` bits
+| TBA | `NN` | bit-shift `A` right by `B` bits
+| TBA | `AO` | append `O` to `A`
+| TBA | `AO` | prepend `O` to `A`
 | TBA | `NS` | slice string
 | TBA | `NA` | slice array
 

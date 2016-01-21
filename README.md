@@ -53,7 +53,7 @@ at (x:1, y:1) results in:
     2ab56
     34cd7
     
-However, if you use a non-breaking space (`\xA0`), it will overwrite the character underneath it.
+However, if you use a non-breaking space (`\x1F`), it will overwrite the character underneath it.
 
 \- Patterns are drawn in the direction of the cursor. For example, if you draw
 
