@@ -1,7 +1,9 @@
 #### Spec
-- [Main page](https://github.com/ETHproductions/Crayon/blob/master/README.md)
+- [Data types](https://github.com/ETHproductions/Crayon/blob/master/docs/Data-types.md)
 - [Operators](https://github.com/ETHproductions/Crayon/blob/master/docs/Operators.md)
-- Encoding
+- [**Encoding**](https://github.com/ETHproductions/Crayon/blob/master/docs/Encoding.md)
+
+**Please note:** This spec is a draft; any detail may change without warning.
 
 ### Encoding
 
@@ -37,7 +39,3 @@ Crayon uses custom positional and directional chars in the range 00-1F:
 	20  sp    When the pattern is drawn onto the canvas, leave the character underneath untouched.
 
 Each of these chars will probably have a visual equivalent (except newline, tab, and/or nbsp). The rest of the encoding abides with the ISO-8859-1 format, but only chars in the range 00-7E are used (except in compressed strings).
-
-Characters currently not assigned to a task:
-
-    AaCcDdEGgHhLlNRrSTtUuVvWZz`
