@@ -1,5 +1,5 @@
 #### Spec
-- [**Data types**](https://github.com/ETHproductions/Crayon/blob/master/docs/Data-types.md)
+- [**Data types**](https://github.com/ETHproductions/Crayon/blob/master/docs/Data%20types.md)
 - [Operators](https://github.com/ETHproductions/Crayon/blob/master/docs/Operators.md)
 - [Encoding](https://github.com/ETHproductions/Crayon/blob/master/docs/Encoding.md)
 
