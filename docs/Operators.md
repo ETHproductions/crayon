@@ -5,39 +5,41 @@
 
 **Please note:** This spec is a draft; any detail may change without warning.
 
-### Output manipulation
+### Canvas manipulation
 
     Char  Action
-    dn*   point crayon N
-    ds*   point crayon S
-    de*   point crayon E
-    dw*   point crayon W
-    n     move crayon N by 1
-    s     move crayon S by 1
-    e     move crayon E by 1
-    w     move crayon W by 1
-    tl1*  turn crayon 45° counter-clockwise
-    tl2*  turn crayon 90° counter-clockwise
-    tl3*  turn crayon 135° counter-clockwise
-    tu4*  turn crayon 180°
-    tr3*  turn crayon 135° clockwise
-    tr2*  turn crayon 90° clockwise
-    tr1*  turn crayon 45° clockwise
-    xnl*  start next line
-    f     move crayon forward by 1
-    F     pop X, move crayon forward by X
-    m     pop X, pop Y, move crayon by (x: X, y: Y)
-    M     pop X, pop Y, move crayon to (x: X, y: Y)
-    x     pop X, move crayon by (x: X)
-    y     pop Y, move crayon by (y: Y)
-    X     pop X, set crayon X to X
-    Y     pop Y, set crayon Y to Y
-    q     pop X, draw pattern X at crayon, push X
-    Q     pop X, fill canvas with pattern X, push X
-    k     push canvas as pattern
-    K     pop X, set canvas to pattern X
-    P     pretend the top item is the canvas
-    p     quit pretending
+    dn*   Point crayon N.
+    ds*   Point crayon S.
+    de*   Point crayon E.
+    dw*   Point crayon W.
+    n     Move crayon N by 1.
+    s     Move crayon S by 1.
+    e     Move crayon E by 1.
+    w     Move crayon W by 1.
+    tl1*  Turn crayon 45° counter-clockwise.
+    tl2*  Turn crayon 90° counter-clockwise.
+    tl3*  Turn crayon 135° counter-clockwise.
+    tu4*  Turn crayon 180°.
+    tr3*  Turn crayon 135° clockwise.
+    tr2*  Turn crayon 90° clockwise.
+    tr1*  Turn crayon 45° clockwise.
+    xnl*  Start next line.
+    f     Move crayon forward by 1.
+    F     Pop X, move crayon forward by X.
+    m     Pop X, pop Y, move crayon by (x: X, y: Y).
+    M     Pop X, pop Y, move crayon to (x: X, y: Y).
+    x     Pop X, move crayon by (x: X).
+    y     Pop Y, move crayon by (y: Y).
+    X     Pop X, set crayon X to X.
+    Y     Pop Y, set crayon Y to Y.
+    q     Draw pattern X at crayon.
+    Q     Fill canvas with pattern X.
+    k     Push canvas as pattern.
+    K     Pop X, set canvas to pattern X.
+    P     Pretend the top item is the canvas.
+    p     Quit pretending.
+	D     Drawing commands, determined by next character.
+	d     More drawing commands.
 
 *For more information on these positional and directional control chars, see [Encoding](https://github.com/ETHproductions/Crayon/blob/master/docs/Encoding.md).
 
@@ -46,7 +48,7 @@
 A conditional expression is used like so:
 
     =?nq{sq+}
-    
+
 Let's break that down:
 
     =?         If the top two items are equal,
@@ -63,7 +65,7 @@ Or even skip the truthy case:
 
     =?{sq+}
 	=!?sq+}    Equivalent to the above.
-    
+
 If some actions need to be run regardless of the condition, you can delay the conditional:
 
     =?;;nq{;;sq+}
@@ -85,7 +87,7 @@ You can chain conditionals to create AND and OR gates:
       ?      If the top item is truthy:
 	   nq      move the crayon one position north and draw the top item.
          }   End if.
-		 
+
 The conditional and control flow chars:
 
     Char  Action
@@ -196,7 +198,6 @@ Unless two distinct operations are assigned to `<X> <Y>` and `<Y> <X>`, the oper
     /     <num> <str>   Split B into groups of A chars. ("abcdefg"3/ => ["abc","def","g"])
     /     <num> <lst>   Split B into groups of A items.
     /     <str> <str>   Split A at occurances of B.
-    /     <str> <lst>   TBA
     /     <lst> <lst>   Pair lists? ([0 1 2][3 4 5]/ => [[0,3],[1,4],[2,5]])
     %     <num> <num>   Modulo. % in JS.
     %     <num> <str>   Unriffle B into A groups. ("hweolrllod"2% => ["hello","world"])
@@ -216,7 +217,7 @@ Unless two distinct operations are assigned to `<X> <Y>` and `<Y> <X>`, the oper
     .<    <num> <num>   Bit-shift A left by B bits.
     .>    <num> <num>   Bit-shift A right by B bits.
 	B     <num> <num>   Convert A to array of base-B digits.
-	b     <num> <num>   Convert A to base B string.
+	b     <num> <num>   Convert A to base-B string.
 	B     <str> <num>   Convert A from base B to array of base-10 digits.
 	b     <str> <num>   Convert A from base B to base-10 number.
 	B     <lst> <num>   Convert A to base-B string.
