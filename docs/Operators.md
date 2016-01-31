@@ -139,8 +139,8 @@ The conditional and control flow chars:
     0-9   number literals
     .     decimal literal, extra functions
     "     begin/end string literal
-    '     char literal
-    `     regex literal
+    `     char literal
+    '     regex literal
     $p    pi (3.141592...)
     $q    golden ratio (1.618034...)
     $e    e (2.718281...)
