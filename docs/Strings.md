@@ -19,15 +19,15 @@ Patterns are stored as ordinary strings. However, when drawing them on the canva
 
     Drawing   on      at     becomes
     abc       #####   x:1    #####
-	def       #####   y:1    #abc#
-	          #####   d:E    #def#
+    def       #####   y:1    #abc#
+              #####   d:E    #def#
     
 \- Spaces are not drawn onto the canvas, either:
 
     Drawing   on      at     becomes
     ab        #####   x:1    #####
-	 cd       #####   y:1    #ab##
-	          #####   d:E    ##cd#
+     cd       #####   y:1    #ab##
+              #####   d:E    ##cd#
     
 However, if you use a non-breaking space (`\x1F`), it will overwrite the character underneath it.
 
@@ -35,9 +35,9 @@ However, if you use a non-breaking space (`\x1F`), it will overwrite the charact
 
     Drawing   on      at     becomes
     abcd      ####    x:0    ###d
-	          ####    y:3    ##c#
-	          ####    d:NE   #b##
-	          ####           a###
+              ####    y:3    ##c#
+              ####    d:NE   #b##
+              ####           a###
 
 \- If the pattern goes off the edge of the canvas (even into negative coordinates), the canvas is extended in that direction. The origin stays where it was previously.
 

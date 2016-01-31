@@ -38,8 +38,8 @@
     K     Pop X, set canvas to pattern X.
     P     Pretend the top item is the canvas.
     p     Quit pretending.
-	D     Drawing commands, determined by next character.
-	d     More drawing commands.
+    D     Drawing commands, determined by next character.
+    d     More drawing commands.
 
 *For more information on these positional and directional control chars, see [Encoding](https://github.com/ETHproductions/Crayon/blob/master/docs/Encoding.md).
 
@@ -64,7 +64,7 @@ You can also skip the else:
 Or even skip the truthy case:
 
     =?{sq+}
-	=!?sq+}    Equivalent to the above.
+    =!?sq+}    Equivalent to the above.
 
 If some actions need to be run regardless of the condition, you can delay the conditional:
 
@@ -78,14 +78,14 @@ You can chain conditionals to create AND and OR gates:
     <        Push (first item is less than the second item).
      a       Pop A, pop B, push A&&B.
       ?      If the top item is truthy:
-	   nq      move the crayon one position north and draw the top item.
+       nq      move the crayon one position north and draw the top item.
          }   End if.
 
     <z?nq}
     <        Push (first item is less than the second item).
      z       Pop A, pop B, push A||B.
       ?      If the top item is truthy:
-	   nq      move the crayon one position north and draw the top item.
+       nq      move the crayon one position north and draw the top item.
          }   End if.
 
 The conditional and control flow chars:
@@ -94,7 +94,7 @@ The conditional and control flow chars:
     =     Equal. Push 1 if the top two items are equal; 0 otherwise.
     <     Less. Push 1 if the top item is less than the second; 0 otherwise.
     >     Greater. Push 1 if the top item is greater than the second; 0 otherwise.
-	TBA   Comparison. Push 1 if the top item is greater than the second; -1 if the top item is less than the second; 0 otherwise.
+    TBA   Comparison. Push 1 if the top item is greater than the second; -1 if the top item is less than the second; 0 otherwise.
     !     Logical NOT. Pop A, push 0 if A is truthy, 1 otherwise.
     a     Logical AND. Pop A, pop B, push A if A is falsy, B otherwise.
     z     Logical OR. Pop A, pop B, push A if A is truthy, B otherwise.
@@ -103,7 +103,7 @@ The conditional and control flow chars:
     }     End-if, end-loop.
     o     Pop X; loop through each item I and index i in X.*
     O     Perform o, but push I onto the stack before each iteration.*
-	W     While loop; repeat until the top of the stack is falsy...
+    W     While loop; repeat until the top of the stack is falsy...
 
 *If a loop is entered inside another loop, `J` and `j` are used instead.
 
@@ -125,10 +125,10 @@ The conditional and control flow chars:
     Char  Action
     [     Push empty array. Stack operations enter this array.
     _     Stack operations enter top array.
-	#     Pop A; wrap top A items in array.
+    #     Pop A; wrap top A items in array.
     ]     Wrap the current stack in an array and push it back onto the main stack.
     \     Swap top two items.
-	@     Rotate top three items.
+    @     Rotate top three items.
     ,     Pop A; bring Ath item to top.
     :     Duplicate top item.
     ;     Remove top item.
@@ -140,6 +140,7 @@ The conditional and control flow chars:
     .     decimal literal, extra functions
     "     begin/end string literal
     '     char literal
+    `     regex literal
     $p    pi (3.141592...)
     $q    golden ratio (1.618034...)
     $e    e (2.718281...)
@@ -216,15 +217,15 @@ Unless two distinct operations are assigned to `<X> <Y>` and `<Y> <X>`, the oper
     .*    <lst> <lst>   Setwise multiplication. Pair each item in A with each item in B. ([0 1 2][3 4].* => [[0,3],[0,4],[1,3],[1,4],[2,3],[2,4]])
     .<    <num> <num>   Bit-shift A left by B bits.
     .>    <num> <num>   Bit-shift A right by B bits.
-	B     <num> <num>   Convert A to array of base-B digits.
-	b     <num> <num>   Convert A to base-B string.
-	B     <str> <num>   Convert A from base B to array of base-10 digits.
-	b     <str> <num>   Convert A from base B to base-10 number.
-	B     <lst> <num>   Convert A to base-B string.
-	b     <lst> <num>   Convert A from base B to base-10 number.
+    B     <num> <num>   Convert A to array of base-B digits.
+    b     <num> <num>   Convert A to base-B string.
+    B     <str> <num>   Convert A from base B to array of base-10 digits.
+    b     <str> <num>   Convert A from base B to base-10 number.
+    B     <lst> <num>   Convert A to base-B string.
+    b     <lst> <num>   Convert A from base B to base-10 number.
 
 Characters currently not assigned to a task:
 
-    CcDdEGgHhLlRrTtUuVvZ`
+    CcEGgHhLlTtUuVvZ
 
 More operators to come.... Suggestions are welcome for operators, operations, or anything else.
