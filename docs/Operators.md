@@ -52,7 +52,8 @@
     L     Read a line of input.
     Z     Read a multi-line string (ending with end of input or two newlines).
     E     Read everything remaining in the input.
-	v     Evaluate the top item and push the results to the stack.
+	v     Evaluate the top item as input and push the results to the stack.
+	V     Evaluate the top item as Crayon code and push the result to the stack.
 
 #### Control flow
 
@@ -236,9 +237,30 @@ Unless two distinct operations are assigned to `<X> <Y>` and `<Y> <X>`, the oper
     b     <str> <num>   Convert A from base B to base-10 number.
     B     <lst> <num>   Convert A to base-B string.
     b     <lst> <num>   Convert A from base B to base-10 number.
+	
+#### Unassigned operators
 
 Characters currently not assigned to a task:
 
-    CcGgHhtUuV
+    CcGgHhtUu
+
+Unary operator/operand-type combinations not assigned:
+
+    l    <num>
+	.d   <str>, <lst>
+	.D   <str>, <lst>
+
+Binary operator/operand-type combinations not assigned:
+
+	/    <str> <lst>
+	%    <str> <lst>, <lst> <lst>
+	^    <num> <str>, <num> <lst>, <str> <lst>
+	&    <num> <str>, <num> <lst>, <str> <lst>
+	|    <num> <str>, <num> <lst>, <str> <lst>
+	.*   <num> <num>, <num> <str>, <num> <lst>, <str> <lst>
+	.<   <num> <str>, <num> <lst>, <str> <str>, <str> <lst>, <lst> <lst>
+	.>   <num> <str>, <num> <lst>, <str> <str>, <str> <lst>, <lst> <lst>
+	B    <str> <str>, <str> <lst>, <lst> <lst>
+	b    <str> <str>, <str> <lst>, <lst> <lst>
 
 More operators to come.... Suggestions are welcome for operators, operations, or anything else.
