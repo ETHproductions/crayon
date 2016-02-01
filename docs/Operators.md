@@ -5,7 +5,9 @@
 
 **Please note:** This spec is a draft; any detail may change without warning.
 
-### Canvas manipulation
+### Operators
+
+#### Canvas manipulation
 
     Char  Action
     dn*   Point crayon N.
@@ -42,6 +44,15 @@
     d     More drawing commands.
 
 *For more information on these positional and directional control chars, see [Encoding](https://github.com/ETHproductions/Crayon/blob/master/docs/Encoding.md).
+
+#### Input
+
+    Char  Action
+    T     Read a space-separated token.
+    L     Read a line of input.
+    Z     Read a multi-line string (ending with end of input or two newlines).
+    E     Read everything remaining in the input.
+	v     Evaluate the top item and push the results to the stack.
 
 #### Control flow
 
@@ -166,6 +177,8 @@ The conditional and control flow chars:
     A     <num>  Create range 0..A.
     A     <str>  Split string into chars.
     A     <lst>  No-op.
+    l     <str>  Push the length of A.
+    l     <lst>  Push the length of A.
     .d    <num>  convert from degrees to radians ($p*180/)
     .D    <num>  convert to degrees from radians ($p/180*)
 
@@ -226,6 +239,6 @@ Unless two distinct operations are assigned to `<X> <Y>` and `<Y> <X>`, the oper
 
 Characters currently not assigned to a task:
 
-    CcEGgHhLlTtUuVvZ
+    CcGgHhtUuV
 
 More operators to come.... Suggestions are welcome for operators, operations, or anything else.
