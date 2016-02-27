@@ -28,14 +28,14 @@
     xnl*  Start next line.
     f     Move crayon forward by 1.
     F     Pop X, move crayon forward by X.
-    m     Pop X, pop Y, move crayon by (x: X, y: Y).
-    M     Pop X, pop Y, move crayon to (x: X, y: Y).
+    c     Pop X, pop Y, move crayon by (x: X, y: Y).
+    C     Pop X, pop Y, move crayon to (x: X, y: Y).
     x     Pop X, move crayon by (x: X).
     y     Pop Y, move crayon by (y: Y).
     X     Pop X, set crayon X to X.
     Y     Pop Y, set crayon Y to Y.
     q     Draw pattern X at crayon.
-    Q     Fill canvas with pattern X.
+    Q     Perform q and pop.
     k     Push canvas as pattern.
     K     Pop X, set canvas to pattern X.
     P     Pretend the top item is the canvas.
@@ -50,7 +50,7 @@
     Char  Action
     T     Read a space-separated token.
     L     Read a line of input.
-    Z     Read a multi-line string (ending with end of input or two newlines).
+    Z     Read a multi-line string (ending with end of input or blank line).
     E     Read everything remaining in the input.
 	v     Evaluate the top item as input and push the results to the stack.
 	V     Evaluate the top item as Crayon code and push the result to the stack.
@@ -59,72 +59,73 @@
 
 A conditional expression is used like so:
 
-    =?nq{sq+}
+    =nq{sq+}
 
 Let's break that down:
 
-    =?         If the top two items are equal,
-      nq        move the crayon one position north and draw the top item.
-        {      Otherwise,
-         sq+    move the crayon one position south, draw the top item, and perform +.
-            }  Endif.
+    =         If the top two items are equal,
+     nq+       move the crayon one position north, draw the top item, and perform +.
+        {     Otherwise,
+         sq    move the crayon one position south and draw the top item.
+           }  Endif.
 
 You can also skip the else:
 
-    =?nq}
+    =nq+}
 
 Or even skip the truthy case:
 
-    =?{sq+}
-    =!?sq+}    Equivalent to the above.
+    ={sq}
 
 If some actions need to be run regardless of the condition, you can delay the conditional:
 
-    =?;;nq{;;sq+}
+    =;;nq{;;sq+}
     is the same as
-    =@;;?nq{sp+}
+    =;;?nq{sq+}
+	
+	=;+q{;}
+	is the same as
+	=;?+q}
 
 You can chain conditionals to create AND and OR gates:
 
-    <a?nq}
-    <        Push (first item is less than the second item).
-     a       Pop A, pop B, push A&&B.
-      ?      If the top item is truthy:
-       nq      move the crayon one position north and draw the top item.
-         }   End if.
+    <znq}}
+    <        If the first item is less than the second item...
+     z        If the top item is truthy...
+      nq       move the crayon one position north and draw the top item.
+        }}   End both ifs.
 
-    <z?nq}
-    <        Push (first item is less than the second item).
-     z       Pop A, pop B, push A||B.
-      ?      If the top item is truthy:
+    <}znq}
+    <}       If the first item is less than the second item, enter the next conditional.
+      z       If the previous condition succeeded OR the top item is truthy:
        nq      move the crayon one position north and draw the top item.
          }   End if.
 
 The conditional and control flow chars:
 
     Char  Action
-    =     Equal. Push 1 if the top two items are equal; 0 otherwise.
-    <     Less. Push 1 if the top item is less than the second; 0 otherwise.
-    >     Greater. Push 1 if the top item is greater than the second; 0 otherwise.
-    TBA   Comparison. Push 1 if the top item is greater than the second; -1 if the top item is less than the second; 0 otherwise.
-    !     Logical NOT. Pop A, push 0 if A is truthy, 1 otherwise.
-    a     Logical AND. Pop A, pop B, push A if A is falsy, B otherwise.
-    z     Logical OR. Pop A, pop B, push A if A is truthy, B otherwise.
-    ?     Start conditional. Pop the top item; if truthy...
+	z     Truthy.
+    !     Falsy.
+    =     Equal.
+    <     Less.
+    >     Greater.
+    O     For loop. Loop through each item I and index i in X, pushing I onto the stack before each iteration.*
+    W     While loop; repeat until the top of the stack is falsy...
     {     Conditional else.
     }     End-if, end-loop.
-    o     Pop X; loop through each item I and index i in X.*
-    O     Perform o, but push I onto the stack before each iteration.*
-    W     While loop; repeat until the top of the stack is falsy...
+    G     Comparison. Push 1 if the top item is greater than the second; -1 if the top item is less than the second; 0 otherwise.
+    a     Logical AND. Pop B, pop A, push A if A is falsy, B otherwise.
+    o     Logical OR. Pop B, pop A, push A if A is truthy, B otherwise.
+	t     Ternary conditional. Pop C, pop B, pop A, push B if A is truthy, C otherwise.
 
 *If a loop is entered inside another loop, `J` and `j` are used instead.
 
 #### Meta-operators
 
     Char  Type   Action
-    TBA   <num>  Map next char over 0..A.
-    TBA   <str>  Map next char over each char in A.
-    TBA   <lst>  Map next char over each item in A.
+    m     <num>  Map next char over 0..A.
+    m     <str>  Map next char over each char in A.
+    m     <lst>  Map next char over each item in A.
     TBA   <num>  Reduce next char over 0..A?
     TBA   <str>  Reduce next char over each char in A.
     TBA   <lst>  Reduce next char over each item in A.
@@ -153,9 +154,9 @@ The conditional and control flow chars:
     "     begin/end string literal
     `     char literal
     '     regex literal
-    $p    pi (3.141592...)
-    $q    golden ratio (1.618034...)
-    $e    e (2.718281...)
+    .p?   pi (3.141592...)
+    .q?   golden ratio (1.618034...)
+    .e?   e (2.718281...)
 
 #### Unary operators
 
@@ -167,8 +168,8 @@ The conditional and control flow chars:
     )     <str>  Split off last char.
     )     <lst>  Split off last item.
     ~     <num>  Negate.
-    ~     <str>  Uniquify; keep one of each char.
-    ~     <lst>  Uniquify; keep one of each item.
+    ~     <str>  Reverse.
+    ~     <lst>  Reverse.
     N     <num>  No-op.
     N     <str>  Parse string as base-10 number.
     N     <lst>  Sum.
@@ -178,6 +179,11 @@ The conditional and control flow chars:
     A     <num>  Create range 0..A.
     A     <str>  Split string into chars.
     A     <lst>  No-op.
+	v     <str>  Evaluate the top item as input and push the results to the stack.
+	V     <str>  Evaluate the top item as Crayon code and push the result to the stack.
+	X     <str>  Spread chars onto the stack. ("abc"X => `a`b`c)
+	X     <lst>  Spread items onto the stack.
+	F     <lst>  Flatten.
     l     <str>  Push the length of A.
     l     <lst>  Push the length of A.
     .d    <num>  convert from degrees to radians ($p*180/)
@@ -213,11 +219,13 @@ Unless two distinct operations are assigned to `<X> <Y>` and `<Y> <X>`, the oper
     /     <num> <str>   Split B into groups of A chars. ("abcdefg"3/ => ["abc","def","g"])
     /     <num> <lst>   Split B into groups of A items.
     /     <str> <str>   Split A at occurances of B.
-    /     <lst> <lst>   Pair lists? ([0 1 2][3 4 5]/ => [[0,3],[1,4],[2,5]])
+    /     <str> <rgx>   Split A at matches of B.
+    /     <lst> <lst>   Pair lists. ([0 1 2][3 4 5]/ => [[0,3],[1,4],[2,5]])
     %     <num> <num>   Modulo. % in JS.
     %     <num> <str>   Unriffle B into A groups. ("hweolrllod"2% => ["hello","world"])
     %     <num> <lst>   Unriffle B into A groups.
-    %     <str> <str>   Find the index of B in A.
+    %     <str> <str>   Riffle A with B. ("hello""world"% => "hweolrllod")
+    %     <lst> <lst>   Riffle A with B.
     ^     <num> <num>   Binary XOR. ^ in JS.
     ^     <str> <str>   Setwise XOR. Keep one of each char that exists in one but not the other.
     ^     <lst> <lst>   Setwise XOR. Keep one of each item that exists in one but not the other.
@@ -230,37 +238,45 @@ Unless two distinct operations are assigned to `<X> <Y>` and `<Y> <X>`, the oper
     .*    <str> <str>   Setwise multiplication. Pair each char in A with each char in B. ("ABC""ab".* => ["Aa","Ba","Ca","Ab","Bb","Cb"])
     .*    <lst> <lst>   Setwise multiplication. Pair each item in A with each item in B. ([0 1 2][3 4].* => [[0,3],[0,4],[1,3],[1,4],[2,3],[2,4]])
     .<    <num> <num>   Bit-shift A left by B bits.
+	.<    <num> <str>   Rotate B left by A chars.
+	.<    <num> <lst>   Rotate B left by A items.
     .>    <num> <num>   Bit-shift A right by B bits.
+	.>    <num> <str>   Rotate B right by A chars.
+	.>    <num> <lst>   Rotate B right by A items.
     B     <num> <num>   Convert A to array of base-B digits.
     b     <num> <num>   Convert A to base-B string.
     B     <str> <num>   Convert A from base B to array of base-10 digits.
     b     <str> <num>   Convert A from base B to base-10 number.
     B     <lst> <num>   Convert A to base-B string.
     b     <lst> <num>   Convert A from base B to base-10 number.
+	g     <str> <num>   Get the char at index B in A, wrapping at edges. (e.g. "abc"1~g => `c)
+	g     <lst> <num>   Get the item at index B in A, wrapping at edges.
+	C     <lst> <any>   Get the index of B in A.
+	C     <str> <any>   Get the index of B in A.
+	c     <lst> <any>   Get the last index of B in A.
+	c     <str> <any>   Get the last index of B in A.
 	
 #### Unassigned operators
 
 Characters currently not assigned to a task:
 
-    CcGgHhtUu
+    HhMUu
 
-Unary operator/operand-type combinations not assigned:
+Unary operator/operand-type combinations:
 
-    l    <num>
-	.d   <str>, <lst>
-	.D   <str>, <lst>
+       ( ) ~ F l V v X x Y y .D .d
+	N  x x x x       x x x x  x  x
+	S  x x x   x x x x      
+	A  x x x x x     x      
 
-Binary operator/operand-type combinations not assigned:
+Binary operator/operand-type combinations:
 
-	/    <str> <lst>
-	%    <str> <lst>, <lst> <lst>
-	^    <num> <str>, <num> <lst>, <str> <lst>
-	&    <num> <str>, <num> <lst>, <str> <lst>
-	|    <num> <str>, <num> <lst>, <str> <lst>
-	.*   <num> <num>, <num> <str>, <num> <lst>, <str> <lst>
-	.<   <num> <str>, <num> <lst>, <str> <str>, <str> <lst>, <lst> <lst>
-	.>   <num> <str>, <num> <lst>, <str> <str>, <str> <lst>, <lst> <lst>
-	B    <str> <str>, <str> <lst>, <lst> <lst>
-	b    <str> <str>, <str> <lst>, <lst> <lst>
+	    + - * / % & | ^ B b C c g .* .< .>
+	NN  x x x x x x x x x x x x       x  x
+	NS  x x x x x       x x x x x     x  x
+	NA  x x x x x       x x x x x     x  x
+	SS  x x x x x x x x     x x    x      
+	SA  x x x               x x           
+	AA  x x x x x x x x     x x    x      
 
 More operators to come.... Suggestions are welcome for operators, operations, or anything else.
