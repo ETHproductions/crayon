@@ -9,11 +9,11 @@
 
 ### Regexes
 
-Regexes in Crayon are, for the most part, like regexes in most other languages. A regex literal is formed with backticks, like ``'g'abc'``. However, Crayon also has a bunch of 2d-ish features which will be written up in more detail soon.
+Regexes in Crayon will be, for the most part, like regexes in most other languages. A regex literal will be formed with apostrophes, like ``'i'abc'``. However, Crayon will also have a bunch of 2d-ish features which will be written up in more detail soon.
 
 #### Syntax
 
-A regex literal is created in the format ``'g'abc'``. The first section is the **flags** to use in the regex, and the second is the regex itself. The first apostrophe can be omitted entirely if there are no necessary flags and the regex contains at least one non-flag character.
+A regex literal is created in the format ``'i'abc'``. The first section is the **flags** to use in the regex, and the second is the regex itself. The first apostrophe can be omitted entirely if there are no necessary flags and the regex contains at least one non-flag character.
 
 So that backslashes can be used without escaping, backticks are used instead. A literal left parenthesis would be `` `(``, and a literal backtick would be ``` `` ```.
 
