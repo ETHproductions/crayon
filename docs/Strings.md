@@ -29,7 +29,7 @@ Patterns are stored as ordinary strings. However, when drawing them on the canva
      cd       #####   y:1    #ab##
               #####   d:E    ##cd#
     
-However, if you use a non-breaking space (`\x1F`), it will overwrite the character underneath it.
+However, if you use a non-breaking space (`\x1F` or `¶`), it will overwrite the character underneath it.
 
 \- Patterns are drawn in the direction of the cursor. For example:
 
@@ -39,6 +39,6 @@ However, if you use a non-breaking space (`\x1F`), it will overwrite the charact
               ####    d:NE   #b##
               ####           a###
 
-\- If the pattern goes off the edge of the canvas (even into negative coordinates), the canvas is extended in that direction. The origin stays where it was previously.
-
 The crayon is then moved one space past the end of the pattern, to (x:4, y:-1).
+
+\- If the pattern goes off the edge of the canvas (even into negative coordinates), the canvas is extended in that direction. The origin stays where it was previously.
