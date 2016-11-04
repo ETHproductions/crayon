@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+    <title>Crayon Docs - Operators</title>
+    <style>.expandable:hover{cursor:pointer;}</style>
+
+<xmp theme="united" style="display:none;">
+#### [Spec](../)
+- [Data types](../types)
+- **Operators**
+- [Encoding](../encoding)
+
+**Please note:** This spec is a draft; any detail may change without warning.
+
+### Operators
+
+Click on a category or operator to expand it.
+    
+Key:
+    
+- `N` - Number
+- `C` - Char (acts like `S` unless otherwise specified)
+- `S` - String
+- `A` - Array
+- `R` - Regex
+- `O` - Any type
+    
+<ul>
+    <li>
+        <a class="expandable">Canvas manipulation</a>
+        <ul class="hidden">
+            <li>`→` - points the cursor E.</li>
+            <li>`↘` - points the cursor SE.</li>
+            <li>`↓` - points the cursor S.</li>
+            <li>`↙` - points the cursor SW.</li>
+            <li>`←` - points the cursor W.</li>
+            <li>`↖` - points the cursor NW.</li>
+            <li>`↑` - points the cursor N.</li>
+            <li>`↗` - points the cursor NE.</li>
+            <li>`e` - moves the cursor E by 1 unit.</li>
+            <li>`s` - moves the cursor S by 1 unit.</li>
+            <li>`w` - moves the cursor W by 1 unit.</li>
+            <li>`n` - moves the cursor N by 1 unit.</li>
+            <li>`f` - moves the cursor forward by 1 unit.</li>
+            <li>`F` - pops `N` and moves the cursor forward by `N`.</li>
+        </ul>
+    </li>
+    <li>
+        <a class="expandable">Arithmetic</a>
+        <ul class="hidden">
+            <li>
+                <a class="expandable">`+`</a>
+                <ul class="hidden">
+                    <li>`NN` - adds two numbers. `a+b`</li>
+                    <li>`NC` - adds `a` to the charcode of `b`. ``3`a+ -> `d``</li>
+                    <li>`NS` - prepends the number to the string. `a+b`</li>
+                    <li>`SN` - appends the number to the string. `a+b`</li>
+                    <li>`SS` - concatenates the strings. `a+b`</li>
+                    <li>`AA` - concatenates the arrays. `a.concat(b)`</li>
+                    <li>`AO` - appends the item to the array. `a.push(b)`</li>
+                    <li>`OA` - prepends the item to the array. `b.unshift(a)`</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`-`</a>
+                <ul class="hidden">
+                    <li>`NN` - subtracts two numbers. `a-b`</li>
+                    <li>`NC` - subtracts `a` from the charcode of `b`. ``3`d-`` → `` `a``</li>
+                    <li>`NS` - if `n` is negative, keep only the last `n` chars of `s`; else, remove the first `n` chars of `s`.</li>
+                    <li>`SN` - if `n` is negative, keep only the first `n` chars of `s`; else, remove the last `n` chars of `s`.</li>
+                    <li>`NA` - same as `NS`.</li>
+                    <li>`AN` - same as `SN`.</li>
+                    <li>`SS` - removes instances of `b` from `a`.</li>
+                    <li>`SR` - removes matches of `r` from `s`.</li>
+                    <li>`AA` - setwise subtraction; remove all items in `b` from `a`.</li>
+                    <li>`AO` - remove all instances of the item from the array.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`*`</a>
+                <ul class="hidden">
+                    <li>`NN` - multiplies two numbers. `a*b`</li>
+                    <li>`NS` - repeats `s` `n` times. `s.repeat(n)`</li>
+                    <li>`NA` - repeats `a` `n` times.</li>
+                    <li>`SS` - setwise addition? (concat, sort?, uniquify)</li>
+                    <li>`SR` - find all matches of `r` in `s`.</li>
+                    <li>`AA` - setwise addition? (concat, sort?, uniquify)</li>
+                    <li>`SA` - joins `a` with `s`. `a.join(s)`</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`/`</a>
+                <ul class="hidden">
+                    <li>`NN` - divides two numbers. `a/b`</li>
+                    <li>`NS` - splits `s` into groups of `n` chars. `s.match(RegExp(".{1,"+n+"}","g")`</li>
+                    <li>`NA` - splits `a` into groups of `n` items.</li>
+                    <li>`SS` - splits `a` at occurances of `b`. `a.split(b)`</li>
+                    <li>`SR` - splits `s` at matches of `r`. `s.split(r)`</li>
+                    <li>`AA` - pairs arrays. `[0 1 2][3 4 5]/` → `[[0,3],[1,4],[2,5]]`</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`%`</a>
+                <ul class="hidden">
+                    <li>`NN` - modulo two numbers. Always returns a positive number. `(a%b+b)%b`</li>
+                    <li>`NS` - unriffles `s` into `n` strings. `"abcde"2%` → `["ace""bd"]`</li>
+                    <li>`NA` - unriffles `s` into `n` arrays. `[1 2 3 4 5]2%` → `[[1 3 5][2 4]]`</li>
+                    <li>`SS` - riffles `a` with `b`. `"abc""123"% -> "a1b2c3"`</li>
+                    <li>`SR` - splits `s` into matches and non-matches of `r`. ``"a1b2cd"'`d'%`` → `["a""1""b""2""cd"]`</li>
+                    <li>`AA` - riffles arrays. `[0 1 2][3 4 5]%` → `[0 3 1 4 2 5]`</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`&`</a>
+                <ul class="hidden">
+                    <li>`NN` - binary AND. `a&b`</li>
+                    <li>`NS` - ???</li>
+                    <li>`NA` - filter? `[1 2 3 2]2&` → `[2 2]`</li>
+                    <li>`SS` - setwise intersection of `a` and `b`. `"bar""abc"&` → `"ba"`</li>
+                    <li>`SR` - ???</li>
+                    <li>`AA` - setwise intersection of `a` and `b`.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`|`</a>
+                <ul class="hidden">
+                    <li>`NN` - divides two numbers. `a/b`</li>
+                    <li>`NS` - ???</li>
+                    <li>`NA` - ???</li>
+                    <li>`SS` - setwise addition of `a` and `b`. `"bar""abc"|` → `"barc"`</li>
+                    <li>`SR` - ???</li>
+                    <li>`AA` - setwise addition of `a` and `b`.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`^`</a>
+                <ul class="hidden">
+                    <li>`NN` - divides two numbers. `a/b`</li>
+                    <li>`NS` - ???</li>
+                    <li>`NA` - ???</li>
+                    <li>`SS` - setwise XOR of `a` and `b`. `"bar""abc"^` → `"rc"`</li>
+                    <li>`SR` - ???</li>
+                    <li>`AA` - setwise XOR of `a` and `b`.</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+</xmp>
+
+    <script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+    <script>for(var l=document.getElementsByClassName("expandable"),i=0;i<l.length;i++)l[i].onclick=function(){var e=this.parentElement.children[1];e.className=e.className?'':'hidden';}</script>
+</html>
