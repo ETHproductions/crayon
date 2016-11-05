@@ -53,6 +53,49 @@ Key:
         </ul>
     </li>
     <li>
+        <a class="expandable">Input</a>
+        <ul class="hidden">
+            <li>`T` - inputs the next space-separated token.</li>
+            <li>`L` - inputs the next line.</li>
+            <li>`Z` - inputs a multi-line string, stopping at double newline or EOF.</li>
+            <li>`E` - inputs all remaining input.</li>
+        </ul>
+    </li>
+    <li>
+        <a class="expandable">Control flow</a>
+        <ul class="hidden">
+            <li>`z` - if TOS is truthy...</li>
+            <li>`!` - if TOS is falsy...</li>
+            <li>`=` - if top 2 items are equal...</li>
+            <li>`&lt;` - if top item is less than next item...</li>
+            <li>`>` - if top item is greater than next item...</li>
+            <li>`?` - delay execution of the previous conditional until here.</li>
+            <li>`{` - else...</li>
+            <li>`O` - for each item `I` and index `i` in TOS...
+                <br>`I` is pushed before each iteration.
+                <br>For numbers, loops through `[0..n)`.
+                <br>If already in a loop, uses `J` and `j` instead.</li>
+            <li>`W` - while TOS is truthy...</li>
+            <li>`}` - end-if/end-loop. Implicit at end of program.</li>
+        </ul>
+    </li>
+    <li>
+        <a class="expandable">Stack manupulation</a>
+        <ul class="hidden">
+            <li>`[` - push an array and use it as the stack.</li>
+            <li>`]` - exit array and push to stack. If not in array, wraps the entire stack in an array.</li>
+            <li>`_` - use top array as the stack.</li>
+            <li>`\` - swap top two items.</li>
+            <li>`@` - pull up the third item.</li>
+            <li>`:` - duplicate top item.</li>
+            <li>`;` - pop top item.</li>
+            <li>`.;` - push last popped item.</li>
+            <li>`,` - duplicate from below?</li>
+            <li>`l` - pull up `n`th item.</li>
+            <li>`#` - push the length of the stack.</li>
+        </ul>
+    </li>
+    <li>
         <a class="expandable">Unary operations</a>
         <ul class="hidden">
             <li>
@@ -88,6 +131,13 @@ Key:
                 <ul class="hidden">
                     <li>`N` - move the cursor forward by `N`.</li>
                     <li>`A` - flatten.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`l`</a>
+                <ul class="hidden">
+                    <li>`N` - bring up the `n`th item.</li>
+                    <li>`S/A` - pushes length. `"abc"l` → `"abc" 3` </li>
                 </ul>
             </li>
             <li>
