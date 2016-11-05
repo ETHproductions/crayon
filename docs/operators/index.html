@@ -46,8 +46,83 @@ Key:
         </ul>
     </li>
     <li>
-        <a class="expandable">Arithmetic</a>
+        <a class="expandable">Unary operations</a>
         <ul class="hidden">
+            <li>
+                <a class="expandable">`(`</a>
+                <ul class="hidden">
+                    <li>`N/C` - decrement. `a-1`</li>
+                    <li>`S/A` - remove first char/item and place on stack.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`)`</a>
+                <ul class="hidden">
+                    <li>`N/C` - increment. `a+1`</li>
+                    <li>`S/A` - remove last char/item and place on stack.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`~`</a>
+                <ul class="hidden">
+                    <li>`N` - negate. `-a`</li>
+                    <li>`S/A` - reverse.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`F`</a>
+                <ul class="hidden">
+                    <li>`N` - move the cursor forward by `N`.</li>
+                    <li>`A` - flatten.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`v`</a>
+                <ul class="hidden">
+                    <li>`N` - convert to char.</li>
+                    <li>`S` - eval.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`X`</a>
+                <ul class="hidden">
+                    <li>`N` - move to `x`.</li>
+                    <li>`S/A` - spread onto the stack.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`X`</a>
+                <ul class="hidden">
+                    <li>`N` - move to `x`.</li>
+                    <li>`S/A` - spread onto the stack.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`x`</a>
+                <ul class="hidden">
+                    <li>`N` - move by `x`.</li>
+                    <li>`S` - split into chars.</li>
+                    <li>`A` - join with the empty string.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`Y`</a>
+                <ul class="hidden">
+                    <li>`N` - move to `y`.</li>
+                    <li>`S` - convert to array of charcodes.</li>
+                    <li>`A` - convert from array of charcodes.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`y`</a>
+                <ul class="hidden">
+                    <li>`N` - move by `y`.</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="expandable">Binary operations</a>
             <li>
                 <a class="expandable">`+`</a>
                 <ul class="hidden">
