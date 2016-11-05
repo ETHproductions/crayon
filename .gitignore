@@ -1,0 +1,10 @@
+# Node modules
+/node_modules
+
+# junk
+npm-debug.log
+coverage
+
+# Left overs
+/lib
+
