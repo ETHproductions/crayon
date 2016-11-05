@@ -23,12 +23,12 @@ export default new Map([
     ['T', new CrayonFunc(CrayonFuncData.NULLARY, { _: function(state){ state.stack.push((state.input.match(/\S+/) || [""])[0]); state.input = state.input.replace(/^\S+\s?/, ""); } })],
     ['Z', new CrayonFunc(CrayonFuncData.NULLARY, { _: function(state){ state.stack.push((state.input.match(/^[^]+?(?=\n\n|\n$|$)/)||"")[0]); state.input = state.input.replace(/^[^]+?(\n\n|\n$|$)/,""); } })],
     ['l', new CrayonFunc(CrayonFuncData.UNARY, {
-		N: function(state, n){ state.stack.push(n); },
-		O: function(state, x){ state.stack.push(x.length); }
-	})],
+        N: function(state, n){ state.stack.push(n); },
+        O: function(state, x){ state.stack.push(x.length); }
+    })],
     ['*', new CrayonFunc(CrayonFuncData.BINARY, {
-		 NN: function(state, x, y){ state.stack.push(x * y); },
-		_SN: function(state, s, n){ state.stack.push(s.repeat(n)); },
-		_SA: function(state, s, a){ state.stack.push(a.join(s)); }
-	})]
+         NN: function(state, x, y){ state.stack.push(x * y); },
+        _SN: function(state, s, n){ state.stack.push(s.repeat(n)); },
+        _SA: function(state, s, a){ state.stack.push(a.join(s)); }
+    })]
 ]);
