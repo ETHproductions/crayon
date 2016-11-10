@@ -1,5 +1,9 @@
-export default class CrayonCanvas {
-    constructor(text = "") {
+let CrayonCrayon = require('./Crayon');
+
+module.exports = class CrayonCanvas {
+    constructor(text = "",
+                crayon = new CrayonCrayon()) {
+        this.crayon = crayon;
         this.data = [];
         let lines = text.split("\n"),
             i, j;
@@ -29,9 +33,11 @@ export default class CrayonCanvas {
             }
         }
         
-        for (y = minY; y <= maxY; output += "\n", ++y)
+        for (y = minY; y <= maxY; output += "\n", ++y) {
+            let row = this.data[y] || [];
             for (x = minX; x <= maxX; ++x)
-                output += (this.data[y] || [])[x] || " ";
+                output += row[x] || " ";
+        }
         
         return output;
     }

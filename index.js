@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-module.exports = require('./lib/index.js');
+'use strict';
+
+module.exports = require('./src/crayon.js');
