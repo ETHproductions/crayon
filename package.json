@@ -4,6 +4,7 @@
   "description": "The ASCII-art golfing language",
   "main": "index.js",
   "scripts": {
+    "build": "babel -d lib/ src/",
     "start": "./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/ETHproductions/crayon/issues"
   },
-  "homepage": "https://github.com/ETHproductions/crayon#readme"
+  "homepage": "https://github.com/ETHproductions/crayon#readme",
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-plugin-transform-class-properties": "^6.19.0",
+    "babel-preset-es2015": "^6.18.0"
+  }
 }

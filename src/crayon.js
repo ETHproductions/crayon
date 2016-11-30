@@ -21,7 +21,7 @@ for (let i = 2; i < process.argv.length; ++i) {
 
 if (0 in args) fs.readFile(args[0], function (err1, data1) {
     if (err1) return console.log(err1);
-    let code = data1.toString('binary'); // TODO: allow different encodings via flags
+    let code = data1.toString('utf8'); // TODO: allow different encodings via flags
     if (1 in args) fs.readFile(args[1], function (err2, data2) {
         if (err2) return console.log(err2);
         let input = data2.toString('utf8');
