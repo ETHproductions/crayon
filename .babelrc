@@ -1,6 +1,7 @@
 {
     "presets": [ "es2015" ],
     "plugins": [
-        "babel-plugin-transform-class-properties"
+        "babel-plugin-transform-class-properties",
+        "babel-plugin-loop-optimizer"
     ]
 }
