@@ -1,6 +1,7 @@
 'use strict';
 
 let CrayonFunc = require('./structures/Func');
+let Big = require('big.js');
 
 module.exports = new Map([
     ['•', new CrayonFunc(0, { _: function(state){ state.crayon.dir = 0; } })],
@@ -28,7 +29,7 @@ module.exports = new Map([
         O: function(state, x){ state.stack.push(x.length); }
     })],
     ['*', new CrayonFunc(2, {
-         NN: function(state, x, y){ state.stack.push(x * y); },
+         NN: function(state, x, y){ state.stack.push(x.times(y)); },
         _SN: function(state, s, n){ state.stack.push(s.repeat(n)); },
         _SA: function(state, s, a){ state.stack.push(a.join(s)); }
     })]

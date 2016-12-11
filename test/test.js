@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
-import interpreter from './interpreter';
+let interpreter = require('../lib/interpreter');
+let Num = require('big.js');
+let Char = require('../lib/structures/Char');
 
-interpreter.run("Ll");
+interpreter.run('"abc"l');

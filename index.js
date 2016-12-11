@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 'use strict';
 
-module.exports = require('./src/crayon.js');
+module.exports = require('./lib/crayon.js');

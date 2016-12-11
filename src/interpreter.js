@@ -5,9 +5,26 @@
 
 let CrayonCanvas = require('./structures/Canvas');
 let CrayonState = require('./structures/State');
+let Char = require('./structures/Char');
 let behaviors = require('./behaviors');
+let Big = require('big.js');
 
-function ty(a) { return {}.toString.call(a)[8]; }
+function ty(a) {
+    if (a.constructor === Array) return "A";
+    if (a.constructor === Big) return "N";
+    if (a.constructor === Char) return "C";
+    if (a.constructor === RegExp) return "R";
+    if (a.constructor === String) return "S";
+    console.log("What is it?", JSON.stringify(a));
+}
+
+function prettyprint(a) {
+    if (ty(a) === "A")
+        return "[ " + a.map(prettyprint).join(", ") + " ]";
+    if (ty(a) === "N")
+        return a.toString();
+    return '"' + a.replace(/\\|"/g, "\\$&") + '"';
+}
 if (![1].last) {
     Object.defineProperty(Array.prototype, 'last', {
         get: function ( ) { return this[this.length - 1]; },
@@ -107,7 +124,7 @@ module.exports = {
             t = tokens[i];
 
             if (nexts.length && i === nexts.last[2]) ;
-            else if (/^["'`0-9]/.test(t)) state.stack.unshift(t[0] === "`" ? t[1] : t[0] === "'" ? eval("/(?:)/") : eval(t.replace(/`(.)/g, "\\$&")));
+            else if (/^["'`0-9]/.test(t)) state.stack.unshift(t[0] === "`" ? t[1] : t[0] === "'" ? eval("/(?:)/") : t[0] === '"' ? eval(t.replace(/`(.)/g, "\\$&")) : Big(t));
             else if (controls.test(t)) {
                 nexts.push(map[i]);
                 if (t === "O") ;
@@ -126,7 +143,9 @@ module.exports = {
                 if (!currs.last) i = nexts.last[1] || nexts.last[0];
             }
         }
-    
-    console.log("stack:", state.stack);
+        
+        console.log("stack:", prettyprint(state.stack));
+        
+        return state;
     }
 };
