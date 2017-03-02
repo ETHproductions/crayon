@@ -5,9 +5,6 @@ let expect = require('chai').expect;
 
 let char = new Char("a");
 describe("Char('a')", function () {
-    it('should have a type of "C"', function () {
-        expect(char.type).to.equal("C");
-    });
     it('should have .data of "a"', function () {
         expect(char.data).to.equal("a");
     });

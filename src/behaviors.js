@@ -25,12 +25,22 @@ module.exports = new Map([
     ['T', new CrayonFunc(0, { _: function(state){ state.stack.push((state.input.match(/\S+/) || [""])[0]); state.input = state.input.replace(/^\S+\s?/, ""); } })],
     ['Z', new CrayonFunc(0, { _: function(state){ state.stack.push((state.input.match(/^[^]+?(?=\n\n|\n$|$)/)||"")[0]); state.input = state.input.replace(/^[^]+?(\n\n|\n$|$)/,""); } })],
     ['l', new CrayonFunc(1, {
-        N: function(state, n){ state.stack.push(n); },
-        O: function(state, x){ state.stack.push(x.length); }
+        N: function(state, n){ state.stack.unshift(n); },
+        O: function(state, x){ state.stack.unshift(x.length); }
+    })],
+    ['(', new CrayonFunc(1, {
+        N: function(state, n){ state.stack.unshift(n.minus(1)); },
+        S: function(state, x){ state.stack.unshift(x[0], x.slice(1)); },
+        A: function(state, x){ state.stack.unshift(x[0], x.slice(1)); }
+    })],
+    [')', new CrayonFunc(1, {
+        N: function(state, n){ state.stack.unshift(n.plus(1)); },
+        S: function(state, x){ state.stack.unshift(x.slice(-1)[0], x.slice(0, -1)); },
+        A: function(state, x){ state.stack.unshift(x.slice(-1)[0], x.slice(0, -1)); }
     })],
     ['*', new CrayonFunc(2, {
-         NN: function(state, x, y){ state.stack.push(x.times(y)); },
-        _SN: function(state, s, n){ state.stack.push(s.repeat(n)); },
-        _SA: function(state, s, a){ state.stack.push(a.join(s)); }
+         NN: function(state, x, y){ state.stack.unshift(x.times(y)); },
+        _SN: function(state, s, n){ state.stack.unshift(s.repeat(n)); },
+        _SA: function(state, s, a){ state.stack.unshift(a.join(s)); }
     })]
 ]);
