@@ -11,9 +11,7 @@ Nothing in the spec is finalized. Suggestions are welcome for anything.
 
 ## Installation
 
-1. Make sure you have [Node.js](https://nodejs.org) and `npm` installed.
-2. Clone this repo to your computer.
-3. Using the command line, navigate to the repo folder and run `npm install -g`.
+    $ npm install crayon-lang -g
 
 ## Usage
 

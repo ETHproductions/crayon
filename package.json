@@ -1,5 +1,5 @@
 {
-  "name": "crayon",
+  "name": "crayon-lang",
   "version": "0.1.0",
   "description": "The ASCII-art golfing language",
   "main": "index.js",
@@ -15,7 +15,7 @@
     "type": "git",
     "url": "git+https://github.com/ETHproductions/crayon.git"
   },
-  "author": "Vihan B <vihan@vihan.org> (vihan.org)",
+  "author": "ETHproductions <eth3792@gmail.com>",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/ETHproductions/crayon/issues"
