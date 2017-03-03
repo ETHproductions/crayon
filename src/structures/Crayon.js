@@ -19,10 +19,12 @@ module.exports = class CrayonCrayon {
 	}
 	
 	rotateBy (num = 0) {
-		this.dir = ((this.dir + num) % 8 + 8) % 8;
+		this.rotateTo(this.dir + num);
 	}
 	rotateTo (num = 0) {
+		this.moveForward(-1);
 		this.dir = (num % 8 + 8) % 8;
+		this.moveForward(+1);
 	}
 	
 	moveForward (x = 1, dir = 0) {
