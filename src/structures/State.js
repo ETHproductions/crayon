@@ -4,14 +4,11 @@ let CrayonCrayon = require('./Crayon');
 let CrayonCanvas = require('./Canvas');
 
 module.exports = class CrayonState {
-	constructor({
-		crayon = new CrayonCrayon(),
-		canvas = new CrayonCanvas(),
-		stack = []
-	} = {}) {
-		this.crayon = crayon;
-		this.canvas = canvas;
-		this.rstack = stack;
-		this.stack = stack;
+	constructor() {
+		this.canvas = new CrayonCanvas();
+		this.canvas.crayon = this.crayon = new CrayonCrayon();
+		this.rstack = [];
+		this.stack = [];
+		this.input = "";
 	}
 }

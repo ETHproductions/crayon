@@ -2,8 +2,6 @@
 
 'use strict';
 
-console.log(process.argv);
-
 let interpreter = require('./interpreter');
 
 let fs = require("fs");
@@ -19,16 +17,19 @@ for (let i = 2; i < process.argv.length; ++i) {
 		args.push(item);
 }
 
-if (0 in args) fs.readFile(args[0], function (err1, data1) {
-	if (err1) return console.log(err1);
+let codefile = args.shift(), inputfile;
+if (/^[^\d"'\[]/.test(args[0])) inputfile = args.shift();
+
+if (codefile) fs.readFile(codefile, function (err1, data1) {
+	if (err1) return console.error(err1);
 	let code = data1.toString('utf8'); // TODO: allow different encodings via flags
-	if (1 in args) fs.readFile(args[1], function (err2, data2) {
-		if (err2) return console.log(err2);
+	if (inputfile) fs.readFile(inputfile, function (err2, data2) {
+		if (err2) return console.error(err2);
 		let input = data2.toString('utf8');
-		interpreter.run(code, input);
+		process.stdout.write(interpreter.run(code, input, args, /d/.test(flags)).canvas.render());
 	});
-	else interpreter.run(code);
+	else process.stdout.write(interpreter.run(code, "", args, /d/.test(flags)).canvas.render());
 });
 else {
-	console.log("Usage: node ./index.js <code file>[ <input file>]");
+	console.log("Usage: crayon <code file>[ <input file>][ <arg1>[ <arg2> ...]]");
 }

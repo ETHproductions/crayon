@@ -13,12 +13,16 @@ function ty(a) {
 	if (a === undefined || a === null) return "";
 	if (a.constructor === Array) return "A";
 	if (a.constructor === Big) return "N";
-	if (a.constructor === Char) return "C";
+	if (a.hasOwnProperty("data")) return "C";
 	if (a.constructor === RegExp) return "R";
 	if (a.constructor === String) return "S";
 }
 
 function prettyprint(a) {
+	if (a === null)
+		return "null";
+	if (a === undefined)
+		return "undefined";
 	if (ty(a) === "A")
 		return "[ " + a.map(prettyprint).join(", ") + " ]";
 	if (ty(a) === "N")
@@ -29,6 +33,7 @@ function prettyprint(a) {
 		return "'" + a + "'";
 	throw new TypeError("Can't prettyprint a " + (a.constructor + "").match(/[A-Z]\w+/) + " object");
 }
+
 if (![1].last) {
 	Object.defineProperty(Array.prototype, 'last', {
 		get: function ( ) { return this[this.length - 1]; },
@@ -65,10 +70,17 @@ function equal(a, b) {
 }
 
 module.exports = {
-	run (code, input = "") {
-		console.log("Running this code:", code);
+	run (code, input = "", args = [], debug = false) {
+		function delog() { if (debug) console.log.apply(console, arguments); }
+		delog(" code:",  code.replace(/\n/g, "\n      "));
+		delog("input:", input.replace(/\n/g, "\n      "));
+		delog(" args:", "[" + args.join(", ") + "]");
+		
+		args = args.map(x => /^['"]/.test(x) ? eval(x) : x[0] === "`" ? new Char(x[1]) : /^(\d+\.?\d*|\.\d+)$/.test(x) ? Big(x) : null );
+		
 		let state = new CrayonState();
-		let canvas = new CrayonCanvas();
+		state.input = input;
+		if (args.length > 0) state.stack.unshift(args[0]);
 		
 		function c(char) {
 			let func = behaviors.get(char);
@@ -128,13 +140,13 @@ module.exports = {
 		// {type: "endloop", start: 5}
 	
 		let tokens = code.match(/\d*\.\d+|\d+|[.Dd](?:.|$)|"(?:`.|[^"])*"|'([gimtxd]*')?(?:`.|[^'])*'|`.|./g)||[];
-		console.log("tokens:",tokens);
+		delog("tokens:",tokens);
 		let controls = /^[OWz!<=>]$/, indices = [], map = [], i, t, loops;
 		for (i = 0; i < tokens.length; i++) {
 			t = tokens[i];
 			loops = indices.filter(x => /while|for/.test(map[x].type));
 			if (/^"/.test(t)) map.push({ type: "literal", value: eval(t) });
-			else if (/^`/.test(t)) map.push({ type: "literal", value: Char(t[1]) });
+			else if (/^`/.test(t)) map.push({ type: "literal", value: new Char(t[1]) });
 			else if (/^\.?\d/.test(t)) map.push({ type: "literal", value: Big(t) });
 			else if (/^'/.test(t)) throw new TypeError("Can't handle regex yet :(");
 			else if (/^[<=>!z]$/.test(t)) {
@@ -203,11 +215,11 @@ module.exports = {
 			if (i + 1 === tokens.length && indices.length)
 				tokens.push("}");
 		}
-		console.log("map:", map);
+		delog("map:", map);
 		
 		for (i = 0; i < map.length; i++) {
 			t = map[i];
-			// console.log("Executing index", i, "which is", t);
+			// delog("Executing index", i, "which is", t);
 			if (t.type === "literal") {
 				state.stack.unshift(t.value);
 			}
@@ -263,7 +275,7 @@ module.exports = {
 			}
 		}
 		
-		console.log("stack:", prettyprint(state.stack));
+		delog("stack:", prettyprint(state.stack));
 		
 		return state;
 	}
