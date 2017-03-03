@@ -46,5 +46,19 @@ module.exports = class CrayonCanvas {
 		let crayonX = this.crayon.x,
 			crayonY = this.crayon.y,
 			crayonD = this.crayon.dir;
+		
+		for (let char of string) {
+			if (char === "↵" || char === "\n") {
+				this.crayon.x = crayonX;
+				this.crayon.y = crayonY;
+				this.crayon.dir = crayonD;
+				this.crayon.moveForward(1, 2);
+				crayonX = this.crayon.x;
+				crayonY = this.crayon.y;
+			} else {
+				if (char !== " ") this.setChar(this.crayon.x, this.crayon.y, char);
+				this.crayon.moveForward();
+			}
+		}
 	}
 }

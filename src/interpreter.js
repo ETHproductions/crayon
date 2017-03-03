@@ -121,14 +121,18 @@ module.exports = {
 		// {type: "jump", else: 6, cond: true}
 		// {type: "else", end: 9}
 		// {type: "while", end: 9}
-		// {type: "for", value: [1,2,3], index: 0, end: 9}
+		// {type: "for", value: [1,2,3], index: 0, end: 9, break: false}
+		// {type: "break", end: 9}
+		// {type: "continue", start: 5}
+		// {type: "loopvar", start: 5}
 		// {type: "endloop", start: 5}
 	
 		let tokens = code.match(/\d*\.\d+|\d+|[.Dd](?:.|$)|"(?:`.|[^"])*"|'([gimtxd]*')?(?:`.|[^'])*'|`.|./g)||[];
 		console.log("tokens:",tokens);
-		let controls = /^[OWz!<=>]$/, indices = [], map = [], i, t, level;
+		let controls = /^[OWz!<=>]$/, indices = [], map = [], i, t, loops;
 		for (i = 0; i < tokens.length; i++) {
 			t = tokens[i];
+			loops = indices.filter(x => /while|for/.test(map[x].type));
 			if (/^"/.test(t)) map.push({ type: "literal", value: eval(t) });
 			else if (/^`/.test(t)) map.push({ type: "literal", value: Char(t[1]) });
 			else if (/^\.?\d/.test(t)) map.push({ type: "literal", value: Big(t) });
@@ -145,6 +149,26 @@ module.exports = {
 				indices.push(map.length);
 				map.push({ type: "for", end: -1, value: null, index: null });
 			}
+			else if (/^I/i.test(t) && loops.length > 0) {
+				map.push({ type: t === 'I' ? "loopitem" : "loopindex", start: loops.last });
+			}
+			else if (/^J/i.test(t) && loops.length > 1) {
+				map.push({ type: t === 'J' ? "loopitem" : "loopindex", start: loops.last2 });
+			}
+			else if (t === "break") { /* What operator? */
+				if (loops.length > 0) {
+					map.push({ type: "break", start: loops.last });
+				} else {
+					throw new Error("Break outside a loop? I don't think so!");
+				}
+			}
+			else if (t === "continue") { /* What operator? */
+				if (loops.length > 0) {
+					map.push({ type: "continue", start: loops.last });
+				} else {
+					throw new Error("Continue outside a loop? I don't think so!");
+				}
+			}
 			else if (t === "?") {
 				map[indices.last].jump = map.length;
 				map.push({ type: "jump", else: -1, cond: null });
@@ -158,10 +182,9 @@ module.exports = {
 				map[map[indices.last].jump].else = map.length;
 			}
 			else if (t === "}") {
-				if (map[indices.last].type === "while" || map[indices.last].type === "for") {
+				if (/while|for/.test(map[indices.last].type)) {
 					map.push({ type: "endloop", start: indices.last });
 					map[indices.last].end = map.length;
-					indices.pop();
 				} else {
 					if (map[indices.last].jump < 0) {
 						map[indices.last].jump = indices.last + 1;
@@ -172,8 +195,8 @@ module.exports = {
 					} else {
 						map[map[map[indices.last].jump].else - 1].end = map.length;
 					}
-					indices.pop();
 				}
+				indices.pop();
 			}
 			else map.push({ type: "command", value: t });
 			
@@ -205,7 +228,7 @@ module.exports = {
 				i = t.end - 1;
 			}
 			else if (t.type === "while") {
-				if (falsy(state.stack[0])) i = t.end - 1;
+				if (falsy(state.stack[0]) || t.break) t.break = false, i = t.end - 1;
 			}
 			else if (t.type === "for") {
 				if (t.index === null) {
@@ -213,13 +236,27 @@ module.exports = {
 					t.value = state.stack.shift();
 				}
 				else t.index++;
-				if (ty(t.value) === "N" ? t.value.cmp(t.index) === 1 : t.index < t.value.length) {
+				if (!t.break && (ty(t.value) === "N" ? t.value.cmp(t.index) === 1 : t.index < t.value.length)) {
 					state.stack.unshift(ty(t.value) === "N" ? Big(t.index) : t.value[t.index]);
 				} else {
 					t.value = null;
 					t.index = null;
+					t.break = false;
 					i = t.end - 1;
 				}
+			}
+			else if (t.type === "loopitem") {
+				state.stack.unshift(ty(map[t.start].value) === "N" ? Big(map[t.start].index) : map[t.start].value[map[t.start].index] );
+			}
+			else if (t.type === "loopindex") {
+				state.stack.unshift(Big(map[t.start].index));
+			}
+			else if (t.type === "break") {
+				map[t.start].break = true;
+				i = t.start - 1;
+			}
+			else if (t.type === "continue") {
+				i = t.start - 1;
 			}
 			else if (t.type === "endloop") {
 				i = t.start - 1;

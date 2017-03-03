@@ -26,7 +26,8 @@ module.exports = class CrayonCrayon {
 	}
 	
 	moveForward (x = 1, dir = 0) {
-		dir = ((this.dir + num) % 8 + 8) % 8;
-		if (dir === 0) this.x += x, this.y += 0;
+		dir = ((this.dir + dir) % 8 + 8) % 8;
+		this.x += [+x, +x,  0, -x, -x, -x,  0, +x][dir];
+		this.y += [ 0, +x, +x, +x,  0, -x, -x, -x][dir];
 	}
 }
