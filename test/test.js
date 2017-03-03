@@ -5,4 +5,4 @@ let Num = require('big.js');
 let Char = require('../lib/structures/Char');
 let Canvas = require('../lib/structures/Canvas');
 
-interpreter.run('"abc"Oi)*}');
+interpreter.run('"abc"Oi)*}', '', [], true);

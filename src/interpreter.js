@@ -30,7 +30,7 @@ function prettyprint(a) {
 	if (ty(a) === "S")
 		return '"' + a.replace(/\\|"/g, "\\$&") + '"';
 	if (ty(a) === "C")
-		return "'" + a + "'";
+		return "`" + a;
 	throw new TypeError("Can't prettyprint a " + (a.constructor + "").match(/[A-Z]\w+/) + " object");
 }
 
@@ -80,7 +80,7 @@ module.exports = {
 		
 		let state = new CrayonState();
 		state.input = input;
-		if (args.length > 0) state.stack.unshift(args[0]);
+		if (args.length > 0) state.stack.push(args[0]);
 		
 		function c(char) {
 			let func = behaviors.get(char);
@@ -89,9 +89,9 @@ module.exports = {
 			let arity = func.arity;
 			let funcs = func.behavior;
 			
-			if (state.stack.length < arity) return console.error("Error: empty stack");
+			if (state.stack.length < arity) throw new Error("empty stack");
 			
-			var args = state.stack.splice(0, arity);
+			var args = state.stack.splice(state.stack.length - arity, arity);
 			
 			let success = false;
 			function att(f, a) {
@@ -119,7 +119,7 @@ module.exports = {
 			}
 			else if (arity === 3) {
 				att(types[0]+types[1]+types[2],[0,1,2]);
-				att("_OOO",[0,1,2]);
+				att("OOO",[0,1,2]);
 			}
 		}
 	
@@ -221,16 +221,16 @@ module.exports = {
 			t = map[i];
 			// delog("Executing index", i, "which is", t);
 			if (t.type === "literal") {
-				state.stack.unshift(t.value);
+				state.stack.push(t.value);
 			}
 			else if (t.type === "command") {
 				c(t.value);
 			}
 			else if (t.type === "conditional") {
 				var result;
-				if (t.value === "z") result = truthy(state.stack[0]);
-				else if (t.value === "!") result = falsy(state.stack[0]);
-				else if (t.value === "=") result = 1 in state.stack && equal(state.stack[0], state.stack[1]);
+				if (t.value === "z") result = truthy(state.stack.last);
+				else if (t.value === "!") result = falsy(state.stack.last);
+				else if (t.value === "=") result = 1 in state.stack && equal(state.stack.last, state.stack.last2);
 				map[t.jump].cond = result;
 			}
 			else if (t.type === "jump") {
@@ -240,16 +240,16 @@ module.exports = {
 				i = t.end - 1;
 			}
 			else if (t.type === "while") {
-				if (falsy(state.stack[0]) || t.break) t.break = false, i = t.end - 1;
+				if (falsy(state.stack.last) || t.break) t.break = false, i = t.end - 1;
 			}
 			else if (t.type === "for") {
 				if (t.index === null) {
 					t.index = 0;
-					t.value = state.stack.shift();
+					t.value = state.stack.pop();
 				}
 				else t.index++;
 				if (!t.break && (ty(t.value) === "N" ? t.value.cmp(t.index) === 1 : t.index < t.value.length)) {
-					state.stack.unshift(ty(t.value) === "N" ? Big(t.index) : t.value[t.index]);
+					state.stack.push(ty(t.value) === "N" ? Big(t.index) : t.value[t.index]);
 				} else {
 					t.value = null;
 					t.index = null;
@@ -258,10 +258,10 @@ module.exports = {
 				}
 			}
 			else if (t.type === "loopitem") {
-				state.stack.unshift(ty(map[t.start].value) === "N" ? Big(map[t.start].index) : map[t.start].value[map[t.start].index] );
+				state.stack.push(ty(map[t.start].value) === "N" ? Big(map[t.start].index) : map[t.start].value[map[t.start].index] );
 			}
 			else if (t.type === "loopindex") {
-				state.stack.unshift(Big(map[t.start].index));
+				state.stack.push(Big(map[t.start].index));
 			}
 			else if (t.type === "break") {
 				map[t.start].break = true;
@@ -275,7 +275,7 @@ module.exports = {
 			}
 		}
 		
-		delog("stack:", prettyprint(state.stack));
+		delog("stack:", prettyprint(state.rstack));
 		
 		return state;
 	}
