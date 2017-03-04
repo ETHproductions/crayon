@@ -89,8 +89,11 @@ module.exports = class CrayonCanvas {
 				this.crayon.rotateBy(6);
 			} else if (char === "⤹" || char === "\x18") {
 				this.crayon.rotateBy(7);
+			} else if (char === " ") {
+				this.crayon.moveForward();
 			} else {
-				if (char !== " ") this.setChar(this.crayon.x, this.crayon.y, char);
+				if (char === "¤" || char === "\x1F" || char === "\xA0") char = " ";
+				this.setChar(this.crayon.x, this.crayon.y, char);
 				this.crayon.moveForward();
 			}
 		}

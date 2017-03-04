@@ -21,4 +21,4 @@ Examples:
 
 	$ crayon test/hello.crayon
 	$ crayon test/input.crayon test/input.txt
-	$ crayon test/args.crayon 123
+	$ crayon test/args.crayon \"Crayon\"

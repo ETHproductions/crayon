@@ -89,7 +89,10 @@ module.exports = {
 			let arity = func.arity;
 			let funcs = func.behavior;
 			
-			if (state.stack.length < arity) throw new Error("empty stack");
+			if (state.stack.length < arity) {
+				let grab = state.grab(arity - state.stack.length);
+				if (!grab) throw new Error("empty stack");
+			}
 			
 			var args = state.stack.splice(state.stack.length - arity, arity);
 			
@@ -219,7 +222,8 @@ module.exports = {
 		
 		for (i = 0; i < map.length; i++) {
 			t = map[i];
-			// delog("Executing index", i, "which is", t);
+			delog("The stack is", prettyprint(state.stack));
+			delog("Executing index", i, "which is", t);
 			if (t.type === "literal") {
 				state.stack.push(t.value);
 			}

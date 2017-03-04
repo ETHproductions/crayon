@@ -51,7 +51,35 @@ module.exports = new Map([
 	['↶', new CrayonFunc(0, { _: function(state){ state.crayon.rotateBy(5); } })],
 	['⤷', new CrayonFunc(0, { _: function(state){ state.crayon.rotateBy(6); } })],
 	['⤹', new CrayonFunc(0, { _: function(state){ state.crayon.rotateBy(7); } })],
+	['n', new CrayonFunc(0, { _: function(state){ state.crayon.moveBy( 0, -1); } })],
+	['s', new CrayonFunc(0, { _: function(state){ state.crayon.moveBy( 0, +1); } })],
+	['w', new CrayonFunc(0, { _: function(state){ state.crayon.moveBy(-1,  0); } })],
+	['e', new CrayonFunc(0, { _: function(state){ state.crayon.moveBy(+1,  0); } })],
 	['q', new CrayonFunc(1, { O: function(state, o){ state.canvas.writeString(o + ""); state.stack.push(o); } })],
+	['X', new CrayonFunc(1, {
+		N: function(state, n){ state.crayon.x = +n; },
+		O: function(state, x){ state.stack.push(x); }
+	})],
+	['Y', new CrayonFunc(1, {
+		N: function(state, n){ state.crayon.y = +n; },
+		O: function(state, x){ state.stack.push(x); }
+	})],
+	['x', new CrayonFunc(1, {
+		N: function(state, n){ state.crayon.x += +n; },
+		O: function(state, x){ state.stack.push(x); }
+	})],
+	['y', new CrayonFunc(1, {
+		N: function(state, n){ state.crayon.y += +n; },
+		O: function(state, x){ state.stack.push(x); }
+	})],
+	['C', new CrayonFunc(2, {
+		NN: function(state, a, b){ state.crayon.moveTo(a, b); },
+		SS: function(state, a, b){ state.stack.push(Big(a.indexOf(b))); }
+	})],
+	['c', new CrayonFunc(2, {
+		NN: function(state, a, b){ state.crayon.moveBy(a, b); },
+		SS: function(state, a, b){ state.stack.push(Big(a.lastIndexOf(b))); }
+	})],
 	
 	// Input
 	['E', new CrayonFunc(0, { _: function(state){ state.stack.push(state.input); state.input = ""; } })],
