@@ -145,7 +145,7 @@ module.exports = {
 		for (i = 0; i < tokens.length; i++) {
 			t = tokens[i];
 			loops = indices.filter(x => /while|for/.test(map[x].type));
-			if (/^"/.test(t)) map.push({ type: "literal", value: eval(t) });
+			if (/^"/.test(t)) map.push({ type: "literal", value: t.slice(1, -1).replace(/`(.)/g, (_, c) => eval("\"\\" + c + "\"")) });
 			else if (/^`/.test(t)) map.push({ type: "literal", value: new Char(t[1]) });
 			else if (/^\.?\d/.test(t)) map.push({ type: "literal", value: Big(t) });
 			else if (/^'/.test(t)) throw new TypeError("Can't handle regex yet :(");
