@@ -13,7 +13,7 @@ class Char {
 };
 
 for(let key of Object.getOwnPropertyNames(String.prototype)) {
-	if (typeof String.prototype[key] !== "function") continue;
+	if (typeof String.prototype[key] !== "function" || key === "constructor") continue;
 	Char.prototype[key] = function (...args) {
 		return this.data[key](...args);
 	}

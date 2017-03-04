@@ -13,7 +13,7 @@ function ty(a) {
 	if (a === undefined || a === null) return "";
 	if (a.constructor === Array) return "A";
 	if (a.constructor === Big) return "N";
-	if (a.hasOwnProperty("data")) return "C";
+	if (a.constructor === Char) return "C";
 	if (a.constructor === RegExp) return "R";
 	if (a.constructor === String) return "S";
 }
@@ -28,10 +28,10 @@ function prettyprint(a) {
 	if (ty(a) === "N")
 		return a.toString();
 	if (ty(a) === "S")
-		return '"' + a.replace(/\\|"/g, "\\$&") + '"';
+		return JSON.stringify(a);
 	if (ty(a) === "C")
 		return "`" + a;
-	throw new TypeError("Can't prettyprint a " + (a.constructor + "").match(/[A-Z]\w+/) + " object");
+	throw new TypeError("Can't prettyprint", JSON.stringify(a));
 }
 
 if (![1].last) {
