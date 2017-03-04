@@ -72,11 +72,16 @@ function equal(a, b) {
 module.exports = {
 	run (code, input = "", args = [], debug = false) {
 		function delog() { if (debug) console.log.apply(console, arguments); }
-		delog(" code:",  code.replace(/\n/g, "\n      "));
-		delog("input:", input.replace(/\n/g, "\n      "));
+		delog(" code:",  code.replace(/\n/g, "\n       "));
+		delog("input:", input.replace(/\n/g, "\n       "));
 		delog(" args:", "[" + args.join(", ") + "]");
 		
-		args = args.map(x => /^['"]/.test(x) ? eval(x) : x[0] === "`" ? new Char(x[1]) : /^(\d+\.?\d*|\.\d+)$/.test(x) ? Big(x) : null );
+		args = args.map(function(x) {
+			try {
+				x = eval(x);
+			} catch(e) {}
+			return x;
+		});
 		
 		let state = new CrayonState();
 		state.input = input;
