@@ -15,10 +15,13 @@ Nothing in the spec is finalized. Suggestions are welcome for anything.
 
 ## Usage
 
-    $ crayon <code file>[ <input file>][ <arg1>[ <arg2> ...]]
+    $ crayon f <file> <inputs>
+    $ crayon fi <file> <STDIN file> <inputs>
+	$ crayon e <code> <inputs>
+	$ crayon ei <code> <STDIN file> <inputs>
 	
 Examples:
 
-	$ crayon test/hello.crayon
-	$ crayon test/input.crayon test/input.txt
-	$ crayon test/args.crayon \"Crayon\"
+	$ crayon f test/hello.crayon
+	$ crayon fi test/input.crayon test/input.txt
+	$ crayon f test/args.crayon Crayon
