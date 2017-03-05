@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-(function(){
-'use strict';
-
 let interpreter = require('./interpreter');
 
 let fs = require("fs");
+
+(function(){
+'use strict';
 
 let usage = `
 Usage: crayon f <file> [input]          Reads and executes the Crayon program stored
@@ -59,3 +59,5 @@ if (readinput) try { input = fs.readFileSync(args.shift()).toString().replace(/\
 
 process.stdout.write(interpreter.run(code, input, args, debug).canvas.render());
 })();
+
+module.exports = interpreter;

@@ -7,7 +7,7 @@ let CrayonCanvas = require('./structures/Canvas');
 let CrayonState = require('./structures/State');
 let Char = require('./structures/Char');
 let behaviors = require('./behaviors');
-let Big = require('big.js');
+let Big = require('bignumber.js');
 
 function ty(a) {
 	if (a === undefined || a === null) return "";
@@ -155,7 +155,7 @@ module.exports = {
 			loops = indices.filter(x => /while|for/.test(map[x].type));
 			if (/^"/.test(t)) map.push({ type: "literal", value: t.slice(1, -1).replace(/`(.)/g, (_, c) => eval("\"\\" + c + "\"")) });
 			else if (/^`/.test(t)) map.push({ type: "literal", value: new Char(t[1]) });
-			else if (/^\.?\d/.test(t)) map.push({ type: "literal", value: Big(t) });
+			else if (/^\.?\d/.test(t)) map.push({ type: "literal", value: new Big(t) });
 			else if (/^'/.test(t)) throw new TypeError("Can't handle regex yet :(");
 			else if (/^[<=>!z]$/.test(t)) {
 				indices.push(map.length);
@@ -258,7 +258,7 @@ module.exports = {
 				}
 				else t.index++;
 				if (!t.break && (ty(t.value) === "N" ? t.value.cmp(t.index) === 1 : t.index < t.value.length)) {
-					state.stack.push(ty(t.value) === "N" ? Big(t.index) : t.value[t.index]);
+					state.stack.push(ty(t.value) === "N" ? new Big(t.index) : t.value[t.index]);
 				} else {
 					t.value = null;
 					t.index = null;
@@ -267,10 +267,10 @@ module.exports = {
 				}
 			}
 			else if (t.type === "loopitem") {
-				state.stack.push(ty(map[t.start].value) === "N" ? Big(map[t.start].index) : map[t.start].value[map[t.start].index] );
+				state.stack.push(ty(map[t.start].value) === "N" ? new Big(map[t.start].index) : map[t.start].value[map[t.start].index] );
 			}
 			else if (t.type === "loopindex") {
-				state.stack.push(Big(map[t.start].index));
+				state.stack.push(new Big(map[t.start].index));
 			}
 			else if (t.type === "break") {
 				map[t.start].break = true;

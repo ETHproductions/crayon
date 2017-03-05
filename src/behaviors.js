@@ -2,7 +2,7 @@
 
 let CrayonFunc = require('./structures/Func');
 let Char = require('./structures/Char');
-let Big = require('big.js');
+let Big = require('bignumber.js');
 
 function ty(a) {
 	if (a === undefined || a === null) return "";
@@ -74,11 +74,11 @@ module.exports = new Map([
 	})],
 	['C', new CrayonFunc(2, {
 		NN: function(state, a, b){ state.crayon.moveTo(a, b); },
-		SS: function(state, a, b){ state.stack.push(Big(a.indexOf(b))); }
+		SS: function(state, a, b){ state.stack.push(new Big(a.indexOf(b))); }
 	})],
 	['c', new CrayonFunc(2, {
 		NN: function(state, a, b){ state.crayon.moveBy(a, b); },
-		SS: function(state, a, b){ state.stack.push(Big(a.lastIndexOf(b))); }
+		SS: function(state, a, b){ state.stack.push(new Big(a.lastIndexOf(b))); }
 	})],
 	
 	// Input
