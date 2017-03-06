@@ -80,6 +80,7 @@ module.exports = {
 			try {
 				x = eval(x);
 			} catch(e) {}
+			if (typeof x === "number") x = new Big(x);
 			return x;
 		});
 		
