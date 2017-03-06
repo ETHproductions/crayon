@@ -9,6 +9,10 @@ Crayon is a stack-based programming language based on a 2-dimensional output can
 
 Nothing in the spec is finalized. Suggestions are welcome for anything.
 
+## [Reference](https://github.com/ETHproductions/crayon/blob/master/info.txt)
+
+This contains all commands that have been implemented thus far.
+
 ## Installation
 
     $ npm install crayon-lang -g

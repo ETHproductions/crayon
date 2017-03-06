@@ -1,0 +1,133 @@
+Definition of arrayify(x):
+  A: just return A
+  S: return the chars of S
+  C: return [C]
+  N: return the range [0, 1, ..., ceil(N)-1]
+
+•   =  
+→   =  point crayon E
+↘   =  point crayon SE
+↓   =  point crayon S
+↙   =  point crayon SW
+←   =  point crayon W
+↖   =  point crayon NW
+↑   =  point crayon N
+↗   =  point crayon NE
+⚓   =  
+↵   =  
+↦   =  
+↧   =  
+↤   =  
+↰   =  
+↩   =  
+➥   =  
+➦   =  
+⤸   =  turn crayon 45° CW
+⤵   =  turn crayon 90° CW
+↷   =  turn crayon 135° CW
+⟲   =  turn crayon 180°
+↶   =  turn crayon 135° CCW
+⤷   =  turn crayon 90° CCW
+⤹   =  turn crayon 45° CCW
+?   = 
+?   = 
+?   = 
+?   = 
+?   = 
+?   = 
+¤   =  
+    =  
+!   =  if top item is falsy...
+"   =  string literal
+#   =  
+$   =  
+%   =  
+&   =  
+'   =  regex literal
+(   =  N: decrement
+       C: decrement
+       S: shift char
+	   A: shift item
+)   =  N: increment
+       C: increment
+	   S: pop char
+	   A: pop item
+*   =  NN: multiply
+       NS: repeat
+	   SA: join
++   =  
+,   =  
+-   =  
+.   =  numeric literal, extra commands
+/   =  
+0-9 =  numeric literal
+:   =  duplicate
+;   =  pop
+<   =  
+=   =  if top two items are equal...
+>   =  
+?   =  execute conditional here
+@   =  pull up third item
+A   =  
+B   =  
+C   =  
+D   =  extra commands
+E   =  read all of STDIN
+F   =  
+G   =  
+H   =  
+I   =  push inner loop item
+J   =  push outer loop item
+K   =  
+L   =  read a line of STDIN
+M   =  
+N   =  
+O   =  O: loop; for each item in arrayify(O)...
+P   =  
+Q   =  
+R   =  
+S   =  
+T   =  read a space-separated token from STDIN
+U   =  
+V   =  
+W   =  while top item is truthy...
+X   =  
+Y   =  
+Z   =  read all of STDIN until double newline
+[   =  push array and enter
+\   =  swap top two items
+]   =  exit array
+^   =  
+_   =  
+`   =  char literal
+a   =  
+b   =  
+c   =  
+d   =  extra commands
+e   =  move crayon 1 space E
+f   =  
+g   =  
+h   =  
+i   =  push inner loop index
+j   =  push outer loop index
+k   =  
+l   =  S: length
+       A: length
+m   =  
+n   =  move crayon 1 space N
+o   =  
+p   =  
+q   =  write to canvas
+r   =  
+s   =  move crayon 1 space S
+t   =  
+u   =  
+v   =  
+w   =  move crayon 1 space W
+x   =  
+y   =  
+z   =  if top item is truthy...
+{   =  else
+|   =  
+}   =  end if, end loop
+~   =  
