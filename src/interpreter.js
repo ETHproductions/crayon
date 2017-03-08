@@ -74,7 +74,7 @@ module.exports = {
 		function delog() { if (debug) console.log.apply(console, arguments); }
 		delog(" code:",  code.replace(/\n/g, "\n       "));
 		delog("input:", input.replace(/\n/g, "\n       "));
-		delog(" args:", "[" + args.join(", ") + "]");
+		delog(" args:", prettyprint(args));
 		
 		args = args.map(function(x) {
 			try {
