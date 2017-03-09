@@ -27,7 +27,7 @@ Key:
 - `R` - Regex
 - `O` - Any type
     
-<a href="#" onclick='var show=this.innerHTML[0]==="e";for(var l=document.getElementsByClassName("expandable"),i=0;i<l.length;i++)l[i].className=show?"":"hidden";this.innerText=show?"Collapse all":"Expand all"'>Expand all</a>
+<a href="#" onclick='var show=this.innerText[0]==="E";for(var l=document.getElementsByClassName("expandable"),i=0;i<l.length;i++)l[i].className=show?"":"hidden";this.innerText=show?"Collapse all":"Expand all"'>Expand all</a>
     
 <ul>
     <li>
@@ -86,7 +86,7 @@ Key:
         </ul>
     </li>
     <li>
-        <a class="expandable">Stack manupulation</a>
+        <a class="expandable">Stack manipulation</a>
         <ul class="hidden">
             <li>`[` - push an array and use it as the stack.</li>
             <li>`]` - exit array and push to stack. If not in array, wraps the entire stack in an array.</li>
@@ -192,7 +192,7 @@ Key:
                 <a class="expandable">`x`</a>
                 <ul class="hidden">
                     <li>`N` - move by `x`.</li>
-                    <li>`S` - split into chars.</li>
+                    <li>`S` - ???</li>
                     <li>`A` - join with the empty string.</li>
                 </ul>
             </li>
@@ -337,6 +337,28 @@ Key:
                     <li>`NN` - move crayon by `x`, `y`.</li>
                     <li>`AO` - last index.</li>
                     <li>`SO` - last index.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`B`</a>
+                <ul class="hidden">
+                    <li>`NN` - convert `a` to array of base-`b` digits.</li>
+                    <li>`NS` - convert `s` to array of base-`n` digits?</li>
+                    <li>`NA` - convert `a` to base-`n` string?</li>
+                    <li>`SS` - ???</li>
+                    <li>`SR` - ???</li>
+                    <li>`AA` - ???</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`b`</a>
+                <ul class="hidden">
+                    <li>`NN` - convert `a` to string of base-`b` digits, using the alphabet `0-9a-zA-Z$_`.</li>
+                    <li>`NS` - convert `s` from string of base-`n` digits.</li>
+                    <li>`NA` - convert `a` from array of base-`n` digits.</li>
+                    <li>`SS` - ???</li>
+                    <li>`SR` - ???</li>
+                    <li>`AA` - ???</li>
                 </ul>
             </li>
         </ul>
