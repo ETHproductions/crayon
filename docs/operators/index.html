@@ -11,6 +11,8 @@
 - [Encoding](../encoding)
 
 **Please note:** This spec is a draft; any detail may change without warning.
+    
+A list of what has been implemented can be found [here](https://github.com/ETHproductions/crayon/blob/master/info.txt).
 
 ### Operators
 
@@ -24,6 +26,8 @@ Key:
 - `A` - Array
 - `R` - Regex
 - `O` - Any type
+    
+<a href="#" onclick='var show=this.innerHTML[0]==="e";for(var l=document.getElementsByClassName("expandable"),i=0;i<l.length;i++)l[i].className=show?"":"hidden";this.innerText=show?"Collapse all":"Expand all"'>Expand all</a>
     
 <ul>
     <li>
@@ -50,6 +54,8 @@ Key:
             <li>`n` - moves the cursor N by 1 unit.</li>
             <li>`f` - moves the cursor forward by 1 unit.</li>
             <li>`F` - pops `N` and moves the cursor forward by `N`.</li>
+            <li>`q` - draws the top item at the cursor and moves the cursor to the end of the drawn string.</li>
+            <li>`Q` - like `q`, but removes the item from the stack.</li>
         </ul>
     </li>
     <li>
@@ -74,7 +80,7 @@ Key:
             <li>`O` - for each item `I` and index `i` in TOS...
                 <br>`I` is pushed before each iteration.
                 <br>For numbers, loops through `[0..n)`.
-                <br>If already in a loop, uses `J` and `j` instead.</li>
+                <br>If already in a loop, the outer loop uses `J` and `j`.</li>
             <li>`W` - while TOS is truthy...</li>
             <li>`}` - end-if/end-loop. Implicit at end of program.</li>
         </ul>
@@ -84,45 +90,79 @@ Key:
         <ul class="hidden">
             <li>`[` - push an array and use it as the stack.</li>
             <li>`]` - exit array and push to stack. If not in array, wraps the entire stack in an array.</li>
-            <li>`_` - use top array as the stack.</li>
+            <li>`~` - use top array as the stack.</li>
             <li>`\` - swap top two items.</li>
             <li>`@` - pull up the third item.</li>
             <li>`:` - duplicate top item.</li>
-            <li>`;` - pop top item.</li>
-            <li>`.;` - push last popped item.</li>
+            <li>`;` - remove top item.</li>
+            <li>`.;` - push last removed item.</li>
             <li>`,` - duplicate from below?</li>
             <li>`l` - pull up `n`th item.</li>
-            <li>`#` - push the length of the stack.</li>
+            <li>`#`? - push the length of the stack.</li>
         </ul>
     </li>
     <li>
         <a class="expandable">Unary operations</a>
         <ul class="hidden">
             <li>
+                <a class="expandable">`N`</a>
+                <ul class="hidden">
+                    <li>`N` - no-op.</li>
+                    <li>`C` - convert to charcode.</li>
+                    <li>`S` - attempt to convert to number.</li>
+                    <li>`A` - sum.</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`S`</a>
+                <ul class="hidden">
+                    <li>`N/C` - convert to string.</li>
+                    <li>`S` - no-op.</li>
+                    <li>`A` - join with (newline? empty string?).</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`A`</a>
+                <ul class="hidden">
+                    <li>`N` - range; (`[0...N-1]`? `[1...N]`?)</li>
+                    <li>`C` - ???</li>
+                    <li>`S` - convert to an array of chars.</li>
+                    <li>`A` - no-op.</li>
+                </ul>
+            </li>
+            <li>
                 <a class="expandable">`(`</a>
                 <ul class="hidden">
                     <li>`N/C` - decrement. `a-1`</li>
-                    <li>`S/A` - remove first char/item and place on stack.</li>
+                    <li>`S/A` - shift; remove first char/item and place on stack.</li>
                 </ul>
             </li>
             <li>
                 <a class="expandable">`)`</a>
                 <ul class="hidden">
                     <li>`N/C` - increment. `a+1`</li>
-                    <li>`S/A` - remove last char/item and place on stack.</li>
+                    <li>`S/A` - pop; remove last char/item and place on stack.</li>
                 </ul>
             </li>
             <li>
-                <a class="expandable">`~`</a>
+                <a class="expandable">`_`</a>
                 <ul class="hidden">
                     <li>`N` - negate. `-a`</li>
                     <li>`S/A` - reverse.</li>
                 </ul>
             </li>
             <li>
+                <a class="expandable">`~`</a>
+                <ul class="hidden">
+                    <li>`N` - bitwise NOT. `-a`</li>
+                    <li>`S` - eval.</li>
+                    <li>`A` - enter.</li>
+                </ul>
+            </li>
+            <li>
                 <a class="expandable">`.~`</a>
                 <ul class="hidden">
-                    <li>`N` - bitwise NOT. `~a`</li>
+                    <li>`N` - ???</li>
                     <li>`S/A` - uniquify.</li>
                 </ul>
             </li>
@@ -130,6 +170,7 @@ Key:
                 <a class="expandable">`F`</a>
                 <ul class="hidden">
                     <li>`N` - move the cursor forward by `N`.</li>
+                    <li>`S` - ???</li>
                     <li>`A` - flatten.</li>
                 </ul>
             </li>
@@ -138,20 +179,6 @@ Key:
                 <ul class="hidden">
                     <li>`N` - bring up the `n`th item.</li>
                     <li>`S/A` - pushes length. `"abc"l` → `"abc" 3` </li>
-                </ul>
-            </li>
-            <li>
-                <a class="expandable">`v`</a>
-                <ul class="hidden">
-                    <li>`N` - convert to char.</li>
-                    <li>`S` - eval.</li>
-                </ul>
-            </li>
-            <li>
-                <a class="expandable">`X`</a>
-                <ul class="hidden">
-                    <li>`N` - move to `x`.</li>
-                    <li>`S/A` - spread onto the stack.</li>
                 </ul>
             </li>
             <li>
@@ -181,6 +208,8 @@ Key:
                 <a class="expandable">`y`</a>
                 <ul class="hidden">
                     <li>`N` - move by `y`.</li>
+                    <li>`S` - ???</li>
+                    <li>`A` - ???</li>
                 </ul>
             </li>
         </ul>
@@ -206,8 +235,8 @@ Key:
                 <ul class="hidden">
                     <li>`NN` - subtracts two numbers. `a-b`</li>
                     <li>`NC` - subtracts `a` from the charcode of `b`. ``3`d-`` → `` `a``</li>
-                    <li>`NS` - if `n` is negative, keep only the last `n` chars of `s`; else, remove the first `n` chars of `s`.</li>
-                    <li>`SN` - if `n` is negative, keep only the first `n` chars of `s`; else, remove the last `n` chars of `s`.</li>
+                    <li>`NS` - slice; if `n` is negative, keep only the last `n` chars of `s`; else, remove the first `n` chars of `s`.</li>
+                    <li>`SN` - slice; if `n` is negative, keep only the first `n` chars of `s`; else, remove the last `n` chars of `s`.</li>
                     <li>`NA` - same as `NS`.</li>
                     <li>`AN` - same as `SN`.</li>
                     <li>`SS` - removes instances of `b` from `a`.</li>
@@ -264,7 +293,7 @@ Key:
             <li>
                 <a class="expandable">`|`</a>
                 <ul class="hidden">
-                    <li>`NN` - divides two numbers. `a/b`</li>
+                    <li>`NN` - binary OR. `a|b`</li>
                     <li>`NS` - ???</li>
                     <li>`NA` - ???</li>
                     <li>`SS` - setwise addition of `a` and `b`. `"bar""abc"|` → `"barc"`</li>
@@ -275,7 +304,7 @@ Key:
             <li>
                 <a class="expandable">`^`</a>
                 <ul class="hidden">
-                    <li>`NN` - divides two numbers. `a/b`</li>
+                    <li>`NN` - binary XOR. `a^b`</li>
                     <li>`NS` - ???</li>
                     <li>`NA` - ???</li>
                     <li>`SS` - setwise XOR of `a` and `b`. `"bar""abc"^` → `"rc"`</li>
@@ -308,6 +337,34 @@ Key:
                     <li>`NN` - move crayon by `x`, `y`.</li>
                     <li>`AO` - last index.</li>
                     <li>`SO` - last index.</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="expandable">Unassigned tasks</a>
+        <ul class="hidden">
+            <li>
+                <a class="expandable">`N`</a>
+                <ul class="hidden">
+                    <li>convert to char</li>
+                    <li>range (inverse of `A` command, either `[0...N-1]` or `[1...N]`)</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`S`</a>
+                <ul class="hidden">
+                    <li>transpose</li>
+                    <li>rotate</li>
+                </ul>
+            </li>
+            <li>
+                <a class="expandable">`A`</a>
+                <ul class="hidden">
+                    <li>transpose</li>
+                    <li>rotate</li>
+                    <li>sort</li>
+                    <li>self-riffle (`[1 2 3 4 5 6]` → `[1 3 5 2 4 6]`</li>
                 </ul>
             </li>
         </ul>
