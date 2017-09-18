@@ -54,8 +54,27 @@ if (readcode === null) {
 	return;
 }
 
-if (readcode) try { code = fs.readFileSync(code).toString().replace(/\r\n/g, "\n"); } catch(e) { console.log('Error: Could not find file at', code); return; }
-if (readinput) try { input = fs.readFileSync(args.shift()).toString().replace(/\r\n/g, "\n"); } catch(e) { console.log('Error: Could not find file at', code); return; }
+function readFile(name) {
+	let content;
+
+	try {
+		content = fs.readFileSync(name);
+	} catch (e) {
+		console.log('Error: Could not find file at ' + name);
+		return null;
+	}
+
+	return content.toString().replace(/\r\n/g, "\n");
+}
+
+if (readcode) {
+	code = readFile(code);
+	if (code === null) return;
+}
+if (readinput) {
+	input = readFile(args.shift());
+	if (input === null) return;
+}
 
 process.stdout.write(interpreter.run(code, input, args, debug).canvas.render());
 })();

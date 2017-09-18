@@ -18,7 +18,11 @@ module.exports = class CrayonState {
 	}
 	
 	exit() {
-		this.stack = this.stacks.pop();
+		if (this.stacks.length === 0) {
+			this.rstack = this.stack = [this.stack];
+		} else {
+			this.stack = this.stacks.pop();
+		}
 	}
 	
 	grab(n = 1) {
@@ -32,5 +36,24 @@ module.exports = class CrayonState {
 			}
 		}
 		return i > -1;
+	}
+
+	steal(n) {
+		var single = typeof n === "undefined";
+		if (single) n = 1;
+		if (this.stack.length < n) {
+			let grab = this.grab(n - this.stack.length);
+			if (!grab) throw new Error("empty stack");
+		}
+		if (single) return this.stack.pop();
+		return this.stack.splice(this.stack.length - n, n);
+	}
+
+	peek(n = 0) {
+		return this.stack[this.stack.length - 1 - n];
+	}
+
+	push(...args) {
+		return this.stack.push(...args);
 	}
 }
