@@ -6,6 +6,8 @@
 let CrayonCanvas = require('./structures/Canvas');
 let CrayonState = require('./structures/State');
 let Char = require('./structures/Char');
+let Program = require('./structures/Program');
+let Instruction = require('./structures/Instruction');
 let behaviors = require('./behaviors');
 let Big = require('bignumber.js');
 
@@ -133,105 +135,128 @@ module.exports = {
 	
 		let tokens = code.match(/\d*\.\d+|\d+|[.Dd](?:.|$)|[Vv][.Dd]?(?:.|$)|"(?:`.|[^"])*"|'([gimtxd]*')?(?:`.|[^'])*'|`[^]|×[^]|[^]/g)||[];
 		delog("tokens:", tokens);
-		let controls = /^[OWz!<=>]$/, indices = [], map = [], i, t, loops;
+		let indices = [],
+		    control_flow = [],
+		    program = new Program(),
+		    i, t, loops;
+		const FIRST_INSTRUCTION = new Instruction({ type: "program-start" }),
+		      LAST_INSTRUCTION = new Instruction({ type: "program-end" });
+
+		program.goto(FIRST_INSTRUCTION);
+		FIRST_INSTRUCTION.append(LAST_INSTRUCTION);
+
 		for (i = 0; i < tokens.length; i++) {
 			t = tokens[i];
-			loops = indices.filter(x => /while|for/.test(map[x].type));
-			if (/^"/.test(t)) map.push({ type: "literal", value: t.slice(1, -1).replace(/`(.)/g, (_, c) => eval("\"\\" + c + "\"")) });
-			else if (/^`/.test(t)) map.push({ type: "literal", value: new Char(t[1]) });
-			else if (/^×/.test(t)) map.push({ type: "literal", value: new Char(t[1]) }, { type: "command", value: "*", vectorize: 0 });
-			else if (/^\.?\d/.test(t)) map.push({ type: "literal", value: new Big(t) });
+			loops = control_flow.filter(x => /while|for/.test(x.type));
+			if (/^"/.test(t)) program.insert({ type: "literal", value: t.slice(1, -1).replace(/`(.)/g, (_, c) => eval("\"\\" + c + "\"")) });
+			else if (/^`/.test(t)) program.insert({ type: "literal", value: new Char(t[1]) });
+			else if (/^×/.test(t)) program.insert({ type: "literal", value: new Char(t[1]) }, { type: "command", value: "*", vectorize: 0 });
+			else if (/^\.?\d/.test(t)) program.insert({ type: "literal", value: new Big(t) });
 			else if (/^'/.test(t)) throw new TypeError("Can't handle regex yet :(");
 			else if (/^V/.test(t)) {
-				map.push({ type: "command", value: t.slice(1), vectorize: 2 });
+				program.insert({ type: "command", value: t.slice(1), vectorize: 2 });
 			}
 			else if (/^v/.test(t)) {
-				map.push({ type: "command", value: t.slice(1), vectorize: 1 });
-			}
-			else if (/^[<=>!z]$/.test(t)) {
-				indices.push(map.length);
-				map.push({ type: "conditional", value: t, jump: -1 });
+				program.insert({ type: "command", value: t.slice(1), vectorize: 1 });
 			}
 			else if (t === "W") {
-				indices.push(map.length);
-				map.push({ type: "while", end: -1 });
+				program.insert({ type: "while", end: null });
+				control_flow.push(program.curr);
 			}
 			else if (t === "O") {
-				indices.push(map.length);
-				map.push({ type: "for", end: -1, value: null, index: null });
+				program.insert({ type: "for", end: null, value: null, index: null });
+				control_flow.push(program.curr);
 			}
 			else if (/^I/i.test(t) && loops.length > 0) {
-				map.push({ type: t === 'I' ? "loopitem" : "loopindex", start: loops.last });
+				program.insert({ type: t === 'I' ? "loopitem" : "loopindex", start: loops.last });
 			}
 			else if (/^J/i.test(t) && loops.length > 1) {
-				map.push({ type: t === 'J' ? "loopitem" : "loopindex", start: loops.last2 });
+				program.insert({ type: t === 'J' ? "loopitem" : "loopindex", start: loops.last2 });
 			}
 			else if (t === "break") { /* What operator? */
 				if (loops.length > 0) {
-					map.push({ type: "break", start: loops.last });
+					program.insert({ type: "break", start: loops.last });
 				} else {
 					throw new Error("Break outside a loop? I don't think so!");
 				}
 			}
 			else if (t === "continue") { /* What operator? */
 				if (loops.length > 0) {
-					map.push({ type: "continue", start: loops.last });
+					program.insert({ type: "continue", start: loops.last });
 				} else {
 					throw new Error("Continue outside a loop? I don't think so!");
 				}
 			}
 			else if (/^[<=>!z]$/.test(t)) {
-				indices.push(map.length);
-				map.push({ type: "conditional", value: t, jump: -1 });
+				program.insert({ type: "conditional", value: t, jump: null });
+				control_flow.push(program.curr);
 			}
 			else if (t === "?") {
-				map[indices.last].jump = map.length;
-				map.push({ type: "jump", else: -1, cond: null });
+				program.insert({ type: "jump", else: null, cond: null });
+				control_flow.last.jump = program.curr;
 			}
 			else if (t === "{") {
-				if (map[indices.last].jump < 0) {
-					map[indices.last].jump = indices.last + 1;
-					map.splice(indices.last + 1, 0, { type: "jump", else: -1, cond: null });
+				if (control_flow.last.jump === null) {
+					control_flow.last.append({ type: "jump", else: null, cond: null });
+					control_flow.last.jump = control_flow.last.next;
 				}
-				map.push({ type: "else", end: -1 });
-				map[map[indices.last].jump].else = map.length;
+				program.insert({ type: "else", end: null });
+				control_flow.last.jump.else = program.curr;
 			}
 			else if (t === "}") {
-				if (/while|for/.test(map[indices.last].type)) {
-					map.push({ type: "endloop", start: indices.last });
-					map[indices.last].end = map.length;
+				console.log(control_flow.last)
+				if (/while|for/.test(control_flow.last.type)) {
+					program.insert({ type: "endloop", start: control_flow.last });
+					control_flow.last.end = program.curr;
 				} else {
-					if (map[indices.last].jump < 0) {
-						map[indices.last].jump = indices.last + 1;
-						map.splice(indices.last + 1, 0, { type: "jump", else: -1, cond: null });
+					if (control_flow.last.jump === null) {
+						control_flow.last.append({ type: "jump", else: null, cond: null });
+						control_flow.last.jump = control_flow.last.next;
 					}
-					if (map[map[indices.last].jump].else < 0) {
-						map[map[indices.last].jump].else = map.length;
-					} else {
-						map[map[map[indices.last].jump].else - 1].end = map.length;
+					if (control_flow.last.jump.else === null) {
+						program.insert({ type: "else", end: null });
+						control_flow.last.jump.else = program.curr;
 					}
+					program.insert({ type: "endif" });
+					control_flow.last.jump.else.end = program.curr;
 				}
-				indices.pop();
+				control_flow.pop();
 			}
 			else {
-				map.push({ type: "command", value: t, vectorize: 0 });
+				program.insert({ type: "command", value: t, vectorize: 0 });
 			}
 			
-			if (i + 1 === tokens.length && indices.length)
+			if (i + 1 === tokens.length && control_flow.length > 0)
 				tokens.push("}");
 		}
-		delog("map:", map);
+		state.program = program;
+
+		if (debug) {
+			console.log("program: {");
+			for (var ins of program.instructions) {
+				console.log(prettyInstruction(ins, 2));
+			}
+			console.log("}");
+		}
+
+		program.goto(FIRST_INSTRUCTION.next);
 		
-		for (i = 0; i < map.length; i++) {
-			t = map[i];
+		while (program.curr !== LAST_INSTRUCTION) {
+			t = program.curr;
 			delog("\nThe stack is", prettyprint(state.stack));
-			delog("Executing index", i, "which is", t);
+			delog("Executing", prettyInstruction(t));
 			if (t.type === "literal") {
 				state.push(t.value);
+				program.next();
 			}
 			else if (t.type === "command") {
 				let func = behaviors.get(t.value);
-				if (!func) return; // This would be the place to throw a NotImplementedError, but why the heck would we do that?
+				if (!func) {
+					// This would be the place to throw a NotImplementedError, but why the heck would we do that?
+					delog("Couldn't find command");
+					program.next();
+					continue;
+				}
 				
 				let arity = func.arity;
 				let funcs = func.behavior;
@@ -271,24 +296,28 @@ module.exports = {
 					att("OOO",[0,1,2]);
 				}
 				if (!success) {
-					console.log("Couldn't find behavior");
+					delog("Couldn't find behavior");
 				}
+				program.next();
 			}
 			else if (t.type === "conditional") {
 				var result;
 				if (t.value === "z") result = truthy(state.peek());
 				else if (t.value === "!") result = falsy(state.peek());
 				else if (t.value === "=") result = state.stack.length >= 2 && equal(state.peek(), state.peek(1));
-				map[t.jump].cond = result;
+				t.jump.cond = result;
+				program.next();
 			}
 			else if (t.type === "jump") {
-				if (!t.cond) i = t.else - 1;
+				if (!t.cond) program.goto(t.else.next);
+				else program.next();
 			}
 			else if (t.type === "else") {
-				i = t.end - 1;
+				program.goto(t.end);
 			}
 			else if (t.type === "while") {
-				if (falsy(state.peek()) || t.break) t.break = false, i = t.end - 1;
+				if (falsy(state.peek()) || t.break) t.break = false, program.goto(t.end.next);
+				else program.next();
 			}
 			else if (t.type === "for") {
 				if (t.index === null) {
@@ -298,34 +327,68 @@ module.exports = {
 				else t.index++;
 				if (!t.break && (ty(t.value) === "N" ? t.value.cmp(t.index) === 1 : t.index < t.value.length)) {
 					state.push(ty(t.value) === "N" ? new Big(t.index) : t.value[t.index]);
+					program.next();
 				} else {
 					t.value = null;
 					t.index = null;
 					t.break = false;
-					i = t.end - 1;
+					program.goto(t.end.next);
 				}
 			}
 			else if (t.type === "loopitem") {
-				state.push(ty(map[t.start].value) === "N" ? new Big(map[t.start].index) : map[t.start].value[map[t.start].index] );
+				state.push(ty(t.start.value) === "N" ? new Big(t.start.index) : t.start.value[t.start.index] );
+				program.next();
 			}
 			else if (t.type === "loopindex") {
-				state.push(new Big(map[t.start].index));
+				state.push(new Big(t.start.index));
+				program.next();
 			}
 			else if (t.type === "break") {
-				map[t.start].break = true;
-				i = t.start - 1;
+				t.start.break = true;
+				program.goto(t.start);
 			}
 			else if (t.type === "continue") {
-				i = t.start - 1;
+				program.goto(t.start);
 			}
 			else if (t.type === "endloop") {
-				i = t.start - 1;
+				program.goto(t.start);
+			}
+			else if (t.type === "endif") {
+				program.next();
 			}
 		}
 		
-		delog("\nstack:", prettyprint(state.rstack));
-		delog("----------------------------------------------------");
+		delog("\nReached program-end\nstack:", prettyprint(state.rstack));
+		delog("------------------------ OUTPUT ------------------------");
 
 		return state;
 	}
 };
+
+function prettyInstruction(ins, indent = 0) {
+	var result = ins.id + ": Instruction {";
+
+	for (var key in ins) {
+		if (key === "program" || key === "id") continue;
+
+		var value = ins[key];
+		if (typeof value === "string" || value instanceof String)
+			value = '"' + value.replace(/["\\]/g, "\\$&").replace(/\n/g, "\\n") + '"';
+		if (value instanceof Char)
+			value = "'" + value.replace(/['\\]/g, "\\$&").replace(/\n/g, "\\n") + "'";
+		if (value instanceof Program)
+			value = "[Program]";
+		if (value instanceof Instruction) {
+			if (value.type === "program-start")
+				value = "program-start";
+			else if (value.type === "program-end")
+				value = "program-end";
+			else
+				value = "Instruction { id: " + ins[key].id + " }";
+		}
+
+		result += "\n  " + key + ": " + value;
+	}
+	result += "\n}";
+	return result.replace(/^/gm, " ".repeat(indent));
+}

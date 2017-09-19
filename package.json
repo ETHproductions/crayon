@@ -1,6 +1,6 @@
 {
   "name": "crayon-lang",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "The ASCII-art golfing language",
   "main": "index.js",
   "scripts": {
