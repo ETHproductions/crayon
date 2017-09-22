@@ -102,10 +102,10 @@ module.exports = {
 		 *   vectorize = 1:
 		 *     arity = 1: runs the command on each item in array(stack.pop())
 		 *     arity = 2:
-		 *       1st value is array:  Runs the command with the 2nd value on each item in the array
 		 *       2nd value is array:  Runs the command with the 1st value on each item in the array
-		 *       1st value is string: Runs the command with the 2nd value on each char in the string
+		 *       1st value is array:  Runs the command with the 2nd value on each item in the array
 		 *       2nd value is string: Runs the command with the 1st value on each char in the string
+		 *       1st value is string: Runs the command with the 2nd value on each char in the string
 		 *       otherwise:           Runs the command with the 2nd value on each item in array(1st value)
 		 *   vectorize = 2: Pairs each item in array(1st value) with the corresponding item in array(2nd value)
 		 *                  and reduces each pair with the command
@@ -204,7 +204,6 @@ module.exports = {
 				control_flow.last.jump.else = program.curr;
 			}
 			else if (t === "}") {
-				console.log(control_flow.last)
 				if (/while|for/.test(control_flow.last.type)) {
 					program.insert({ type: "endloop", start: control_flow.last });
 					control_flow.last.end = program.curr;
